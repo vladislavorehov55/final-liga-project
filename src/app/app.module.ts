@@ -7,6 +7,7 @@ import {MeetupsPageModule} from "./components/pages/meetups-page/meetups-page.mo
 import {MeetupService} from "./services/meetup/meetup.service";
 import {ENVIRONMENT} from "./services/environment/environment.service";
 import {environment} from "../environment/environment";
+import {AuthPageModule} from "./components/pages/auth-page/auth-page.module";
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {environment} from "../environment/environment";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MeetupsPageModule
+    MeetupsPageModule,
+    AuthPageModule
   ],
   providers: [
     MeetupService,

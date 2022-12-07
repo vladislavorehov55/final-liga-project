@@ -1,0 +1,26 @@
+@import "../../../scss-var/variables";
+@import "../../../../styles";
+.page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $page-padding;
+  background: $bg-dark;
+}
+.form {
+  flex-basis: 340px;
+}
+.block {
+  display: flex;
+  justify-content: space-between;
+}
+.link {
+  display: inline-block;
+  max-width: 120px;
+}
+.btnLogin {
+  @extend %btn;
+  background: #4C3F78;
+  flex-basis: 125px;
+}

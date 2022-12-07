@@ -4,3 +4,13 @@
   padding: 0;
   margin: 0;
 }
+%btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
