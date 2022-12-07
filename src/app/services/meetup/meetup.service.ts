@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {IMeetup} from "../models/meetup";
+import {IMeetup} from "../../models/meetup";
+import {EnvironmentService} from "../environment/environment.service";
 
 @Injectable()
 export class MeetupService {
@@ -17,5 +18,5 @@ export class MeetupService {
       createdBy: 'Александр Козаченко'
     }
   ]
-  constructor() { }
+  constructor() {}
 }

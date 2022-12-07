@@ -4,7 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {MeetupsPageModule} from "./components/pages/meetups-page/meetups-page.module";
-import {MeetupService} from "./servcies/meetup.service";
+import {MeetupService} from "./services/meetup/meetup.service";
+import {ENVIRONMENT} from "./services/environment/environment.service";
+import {environment} from "../environment/environment";
 
 @NgModule({
   declarations: [
@@ -15,7 +17,13 @@ import {MeetupService} from "./servcies/meetup.service";
     AppRoutingModule,
     MeetupsPageModule
   ],
-  providers: [MeetupService],
+  providers: [
+    MeetupService,
+    {
+      provide: ENVIRONMENT,
+      useValue: environment
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

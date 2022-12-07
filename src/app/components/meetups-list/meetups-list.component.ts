@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {MeetupService} from "../../servcies/meetup.service";
+import {MeetupService} from "../../services/meetup/meetup.service";
 
 @Component({
   selector: 'app-meetups-list',
