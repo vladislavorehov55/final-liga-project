@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthPageComponent } from './auth-page.component';
 import {RouterModule} from "@angular/router";
+import {MyInputModule} from "../../shared/my-input/my-input.module";
 
 
 
@@ -11,7 +12,8 @@ import {RouterModule} from "@angular/router";
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    MyInputModule
   ],
   exports: [AuthPageComponent]
 })
