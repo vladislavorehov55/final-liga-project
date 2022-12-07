@@ -1,0 +1,87 @@
+.wrapper {
+  border: 0.3px solid #B4B4C0;
+  padding: 10px;
+  font-weight: 400;
+  background: #2C2C2C;
+}
+
+.topBlock {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.title {
+  display: inline-block;
+  margin-right: 5px;
+  color: #E9E9E9;
+}
+
+.date {
+  display: block;
+  font-size: 24px;
+  color: #E9E9E9;
+}
+
+.place {
+  font-size: 14px;
+  color: #E9E9E9;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #E9E9E9;
+}
+
+.text {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #B4B4C0;
+}
+
+.bottomBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.authorBlock {
+  display: flex;
+  align-items: center;
+}
+.authorName {
+  margin-left: 5px;
+  color: #E9E9E9;
+  font-size: 18px;
+}
+
+.btnArrow, .btnNo, .btnYes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.btnsWrap {
+  display: flex;
+}
+.btnYes {
+  background: #4C3F78;
+}
+.btnNo {
+  background: #B4B4C0;
+}
+.btnArrow {
+  background: #B85526;
+  margin-left: 5px;
+}
+
+.count {
+  color: #B85526;
+}
+
+/*# sourceMappingURL=meetup-item.component.css.map */
