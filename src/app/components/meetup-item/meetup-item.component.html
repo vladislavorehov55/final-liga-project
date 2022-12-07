@@ -1,37 +1,35 @@
 <li class="wrapper">
   <div class="topBlock">
     <div>
-      <h2 class="title">Angular vs react</h2>
+      <h2 class="title">{{meetup.name}}</h2>
       <span class="count">321 подписчик</span>
     </div>
 
     <div>
-      <span class="date">14.08.22 13:00</span>
-      <span class="place">Переговорная 14</span>
+      <span class="date">{{meetup.time}}</span>
+      <span class="place">{{meetup.location}}</span>
     </div>
 
   </div>
 
-  <p class="text">Расскажу о том, об этом. О том, об этом. О том, об этом. О том, об этом. О том, об этом. О том, об этом. О том, об
-    этом. О том, об этом.</p>
+  <p class="text">{{meetup.description}}</p>
 
   <h3 class="subtitle">Целевая аудитория</h3>
-  <p class="text">разрабы, аналитики, и проч</p>
+  <p class="text">{{meetup.target_audience}}</p>
 
   <h3 class="subtitle">Что надо знать?</h3>
-  <p class="text">вот этому научу
-        вот это расскажу
-        вот этому научу
-        вот этому расскажу
-  </p>
+  <p class="text">{{meetup.need_to_know}}</p>
+
+  <h3 class="subtitle">Что будет?</h3>
+  <p class="text">{{meetup.will_happen}}</p>
 
   <h3 class="subtitle">Почему надо обязательно прийти?</h3>
-  <p class="text">У меня красный пояс по C++</p>
+  <p class="text">{{meetup.reason_to_come}}</p>
 
   <div class="bottomBlock">
     <div class="authorBlock">
       <app-svg-generator type="user-icon"></app-svg-generator>
-      <span class="authorName">Александр Козаченко</span>
+      <span class="authorName">{{meetup.createdBy}}</span>
     </div>
 
     <div class="btnsWrap">

@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {MeetupsPageModule} from "./components/pages/meetups-page/meetups-page.module";
+import {MeetupService} from "./servcies/meetup.service";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import {MeetupsPageModule} from "./components/pages/meetups-page/meetups-page.mo
     AppRoutingModule,
     MeetupsPageModule
   ],
-  providers: [],
+  providers: [MeetupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
