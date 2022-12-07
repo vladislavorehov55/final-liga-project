@@ -1,6 +1,7 @@
 <div class="inputWrap">
   <input class="input"
-         [(ngModel)]="value"
+         [(ngModel)]="inputValue"
+         (ngModelChange)="inputValueChangeEvent.emit(inputValue)"
          [placeholder]="placeholder"
   >
 </div>
