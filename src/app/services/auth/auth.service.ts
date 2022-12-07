@@ -27,4 +27,8 @@ export class AuthService {
         }
     })
   }
+  logout() {
+    localStorage.removeItem('meetups_app_auth_token')
+    this.router.navigate(['auth'])
+  }
 }
