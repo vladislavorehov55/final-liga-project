@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MeetupService} from "../../services/meetup/meetup.service";
 
 @Component({
@@ -6,8 +6,12 @@ import {MeetupService} from "../../services/meetup/meetup.service";
   templateUrl: './meetups-list.component.html',
   styleUrls: ['./meetups-list.component.scss']
 })
-export class MeetupsListComponent {
+export class MeetupsListComponent implements OnInit {
   constructor(private _meetupService: MeetupService) {}
+
+  ngOnInit() {
+    this._meetupService.getMeetups()
+  }
 
   get meetups() {
     return this._meetupService.meetups
