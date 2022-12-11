@@ -1,4 +1,3 @@
-
 export interface IMeetup {
   id: number
   name: string
@@ -16,11 +15,13 @@ export interface IMeetup {
     password: string
     fio: string
   }
-  users: {
-    id: number
-    email: string
-    password: string
-    fio: string
-  }
+  users: [
+    {
+      id: number
+      email: string
+      password: string
+      fio: string
+    }
+  ]
   isOpened: boolean
 }
