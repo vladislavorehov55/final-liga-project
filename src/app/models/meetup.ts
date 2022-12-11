@@ -22,5 +22,5 @@ export interface IMeetup {
     password: string
     fio: string
   }
-
+  isOpened: boolean
 }

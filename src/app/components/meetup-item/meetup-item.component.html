@@ -14,17 +14,20 @@
 
   <p class="text">{{meetup.description}}</p>
 
-  <h3 class="subtitle">Целевая аудитория</h3>
-  <p class="text">{{meetup.target_audience}}</p>
+  <ng-container *ngIf="meetup.isOpened">
+    <h3 class="subtitle">Целевая аудитория</h3>
+    <p class="text">{{meetup.target_audience}}</p>
 
-  <h3 class="subtitle">Что надо знать?</h3>
-  <p class="text">{{meetup.need_to_know}}</p>
+    <h3 class="subtitle">Что надо знать?</h3>
+    <p class="text">{{meetup.need_to_know}}</p>
 
-  <h3 class="subtitle">Что будет?</h3>
-  <p class="text">{{meetup.will_happen}}</p>
+    <h3 class="subtitle">Что будет?</h3>
+    <p class="text">{{meetup.will_happen}}</p>
 
-  <h3 class="subtitle">Почему надо обязательно прийти?</h3>
-  <p class="text">{{meetup.reason_to_come}}</p>
+    <h3 class="subtitle">Почему надо обязательно прийти?</h3>
+    <p class="text">{{meetup.reason_to_come}}</p>
+  </ng-container>
+
 
   <div class="bottomBlock">
     <div class="authorBlock">
@@ -35,11 +38,18 @@
     <div class="btnsWrap">
       <button class="btnYes">Я пойду</button>
       <button class="btnNo">не смогу пойти</button>
-      <button class="btnArrow">
-        <app-svg-generator type="arrow"></app-svg-generator>
+      <button class="btnArrow" (click)="setOpened(meetup.id)">
+        <app-svg-generator type="arrow"
+                           [ngClass]="{'arrow-up': meetup.isOpened}"
+        >
+        </app-svg-generator>
       </button>
     </div>
   </div>
 </li>
 
-
+<style>
+  .arrow-up {
+    transform: rotate(180deg);
+  }
+</style>
