@@ -6,8 +6,10 @@ import {map} from "rxjs";
 
 @Injectable()
 export class MeetupService {
-  meetups: Array<IMeetup> = []
-
+  private _meetups: Array<IMeetup> = []
+  get meetups() {
+    return this._meetups
+  }
   constructor(private environmentService: EnvironmentService, private http: HttpClient) {
   }
 
@@ -19,12 +21,12 @@ export class MeetupService {
         })
       )
       .subscribe((data) => {
-        this.meetups = data
+        this._meetups = data
       })
   }
 
   setMeetupOpened(id: number) {
-    this.meetups = this.meetups.map(meetup => {
+    this._meetups = this.meetups.map(meetup => {
       if (meetup.id === id) {
         meetup.isOpened = !meetup.isOpened
       }
@@ -45,7 +47,7 @@ export class MeetupService {
           return this.meetups
         })
       )
-      .subscribe((data) => this.meetups = data)
+      .subscribe((data) => this._meetups = data)
   }
 
   unsubscribe(idMeetup: number, idUser: number) {
@@ -63,6 +65,6 @@ export class MeetupService {
           return this.meetups
         })
       )
-      .subscribe((data) => this.meetups = data)
+      .subscribe((data) => this._meetups = data)
   }
 }
