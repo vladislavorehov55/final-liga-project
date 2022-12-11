@@ -9,5 +9,18 @@ export interface IMeetup {
   will_happen: string
   reason_to_come: string
   time: string
-  createdBy: string
+  createdBy: number
+  owner: {
+    id: number
+    email: string
+    password: string
+    fio: string
+  }
+  users: {
+    id: number
+    email: string
+    password: string
+    fio: string
+  }
+
 }
