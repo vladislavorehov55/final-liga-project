@@ -36,9 +36,14 @@
     </div>
 
     <div class="btnsWrap">
-      <button class="btnYes" *ngIf="willGo();else elseBlock">Я пойду</button>
+      <button class="btnYes"
+              *ngIf="willGo();else elseBlock"
+              (click)="subscribe(meetup.id, user.id)"
+      >
+        Я пойду
+      </button>
       <ng-template #elseBlock>
-        <button class="btnNo" >не смогу пойти</button>
+        <button class="btnNo" (click)="unsubscribe(meetup.id, user.id)" >не смогу пойти</button>
       </ng-template>
       <button class="btnArrow" (click)="setOpened(meetup.id)">
         <app-svg-generator type="arrow"

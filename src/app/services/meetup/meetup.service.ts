@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {IMeetup} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
@@ -7,6 +7,7 @@ import {map} from "rxjs";
 @Injectable()
 export class MeetupService {
   meetups: Array<IMeetup> = []
+
   constructor(private environmentService: EnvironmentService, private http: HttpClient) {
   }
 
@@ -29,5 +30,39 @@ export class MeetupService {
       }
       return meetup
     })
+  }
+
+  subscribe(idMeetup: number, idUser: number) {
+    this.http.put<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup`, {idMeetup, idUser})
+      .pipe(
+        map((meetup) => {
+          for (let i = 0; i < this.meetups.length; i++) {
+            if (this.meetups[i].id === meetup.id) {
+              this.meetups[i] = meetup
+              break
+            }
+          }
+          return this.meetups
+        })
+      )
+      .subscribe((data) => this.meetups = data)
+  }
+
+  unsubscribe(idMeetup: number, idUser: number) {
+    this.http.delete<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup`, {
+      body: {idMeetup, idUser}
+    })
+      .pipe(
+        map((meetup) => {
+          for (let i = 0; i < this.meetups.length; i++) {
+            if (this.meetups[i].id === meetup.id) {
+              this.meetups[i] = meetup
+              break
+            }
+          }
+          return this.meetups
+        })
+      )
+      .subscribe((data) => this.meetups = data)
   }
 }
