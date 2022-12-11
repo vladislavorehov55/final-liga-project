@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {EnvironmentService} from "../environment/environment.service";
 import {map} from "rxjs";
 import {Router} from "@angular/router";
+import {IUser} from "../../models/user";
 
 @Injectable()
 export class AuthService {
@@ -45,10 +46,15 @@ export class AuthService {
     );
     return JSON.parse(jsonPayload);
   }
-  get user() {
+  get user(): IUser | null {
     const token = localStorage.getItem('meetups_app_auth_token')
     if (token) {
-      return this.parseJwt(token)
+      const parsedToken = this.parseJwt(token)
+      return {
+        id: parsedToken.id,
+        email: parsedToken.email,
+        roles: parsedToken.roles.map((role: any) => role.name)
+      }
     }
     return null
   }
