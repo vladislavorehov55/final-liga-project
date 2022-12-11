@@ -10,7 +10,7 @@ export class MeetupsListComponent implements OnInit {
   constructor(private _meetupService: MeetupService) {}
 
   ngOnInit() {
-    this._meetupService.getMeetups()
+    this._meetupService.getDataMeetups()
   }
 
   get meetups() {
