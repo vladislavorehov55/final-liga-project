@@ -8,8 +8,9 @@ import {MeetupService} from "./services/meetup/meetup.service";
 import {ENVIRONMENT, EnvironmentService} from "./services/environment/environment.service";
 import {environment} from "../environment/environment";
 import {AuthPageModule} from "./components/pages/auth-page/auth-page.module";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./services/auth/auth.service";
+import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,12 @@ import {AuthService} from "./services/auth/auth.service";
       useValue: environment
     },
     AuthService,
-    EnvironmentService
+    EnvironmentService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

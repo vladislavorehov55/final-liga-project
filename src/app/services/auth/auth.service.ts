@@ -47,7 +47,7 @@ export class AuthService {
     return JSON.parse(jsonPayload);
   }
   get user(): IUser | null {
-    const token = localStorage.getItem('meetups_app_auth_token')
+    const token = this.token
     if (token) {
       const parsedToken = this.parseJwt(token)
       return {
@@ -57,5 +57,8 @@ export class AuthService {
       }
     }
     return null
+  }
+  get token(): string | null {
+    return localStorage.getItem('meetups_app_auth_token')
   }
 }
