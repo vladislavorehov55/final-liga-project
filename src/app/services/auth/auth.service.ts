@@ -31,4 +31,25 @@ export class AuthService {
     localStorage.removeItem('meetups_app_auth_token')
     this.router.navigate(['auth'])
   }
+  parseJwt(token: string) {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  }
+  get user() {
+    const token = localStorage.getItem('meetups_app_auth_token')
+    if (token) {
+      return this.parseJwt(token)
+    }
+    return null
+  }
 }
