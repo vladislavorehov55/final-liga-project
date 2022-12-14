@@ -35,6 +35,10 @@
     <label class="label happen">Что будет</label>
     <textarea class="textareaHappen" formControlName="happen"></textarea>
 
+    <label class="label duration">Длительность(мин.)</label>
+    <div class="inputWrap inputWrapDuration">
+      <input class="input" formControlName="duration">
+    </div>
     <div class="btnWrap">
       <button *ngIf="isCreating; else elseBlock"
               class="btn"

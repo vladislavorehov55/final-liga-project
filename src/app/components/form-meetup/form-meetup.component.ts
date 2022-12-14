@@ -11,7 +11,8 @@ export interface IFormFields {
   description: string
   audience: string
   knowledge: string
-  happen: string
+  happen: string,
+  duration: number
 }
 
 @Component({
@@ -63,7 +64,8 @@ export class FormMeetupComponent implements OnInit{
       description: new FormControl(this.formMeetupService.formFieldsValue.description),
       audience: new FormControl(this.formMeetupService.formFieldsValue.audience),
       knowledge: new FormControl(this.formMeetupService.formFieldsValue.knowledge),
-      happen: new FormControl(this.formMeetupService.formFieldsValue.happen)
+      happen: new FormControl(this.formMeetupService.formFieldsValue.happen),
+      duration: new FormControl(this.formMeetupService.formFieldsValue.duration)
     })
   }
 }

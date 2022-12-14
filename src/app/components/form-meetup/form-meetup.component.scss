@@ -62,6 +62,9 @@
 .happen {
   @include place-in-grid(9, 10, 1, 2)
 }
+.duration {
+  @include place-in-grid(10, 11, 1, 2)
+}
 .inputWrap {
   &Name {
     @include place-in-grid(3, 4, 2, 4)
@@ -74,6 +77,9 @@
   }
   &Place {
     @include place-in-grid(5, 6, 2, 4)
+  }
+  &Duration {
+    @include place-in-grid(10, 11, 2, 3)
   }
 }
 .textarea {
@@ -102,7 +108,7 @@
   }
 }
 .btnWrap {
-  @include place-in-grid(10, 11, 1, 6);
+  @include place-in-grid(11, 12, 1, 6);
   justify-self: center;
 }
 .btn {

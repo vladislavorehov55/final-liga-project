@@ -12,7 +12,8 @@ export class FormMeetupService {
     description: '',
     audience: '',
     knowledge: '',
-    happen: ''
+    happen: '',
+    duration: 90
   }
   isCreating: boolean = true
   isShow: boolean = true
