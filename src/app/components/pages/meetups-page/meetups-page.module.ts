@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MeetupsPageComponent } from './meetups-page.component';
 import {MeetupsListModule} from "../../meetups-list/meetups-list.module";
+import {FormAddModule} from "../../form-add/form-add.module";
 
 
 
@@ -11,7 +12,8 @@ import {MeetupsListModule} from "../../meetups-list/meetups-list.module";
   ],
   imports: [
     CommonModule,
-    MeetupsListModule
+    MeetupsListModule,
+    FormAddModule
   ],
   exports: [MeetupsPageComponent]
 })

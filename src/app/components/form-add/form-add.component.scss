@@ -1,0 +1,87 @@
+@import "../../scss-var/variables";
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #E9E9E9;
+  background: $bg-dark;
+}
+.form {
+  padding: 10px;
+  position: fixed;
+  width: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 20px 1fr;
+  background: $bg-light;
+}
+
+@mixin place-in-grid($gridRowStart, $gridRowEnd, $gridColStart, $gridColEnd) {
+  grid-row-start:$gridRowStart;
+  grid-row-end: $gridRowEnd;
+  grid-column-start: $gridColStart;
+  grid-column-end: $gridColEnd;
+
+}
+.title {
+  text-align: center;
+  @include place-in-grid(1, 2, 1, 6);
+}
+.name {
+  @include place-in-grid(2, 3, 1, 2)
+}
+.date {
+  @include place-in-grid(3, 4, 1, 2)
+}
+.time {
+  @include place-in-grid(3, 4, 3, 4)
+}
+.place {
+  @include place-in-grid(4, 5, 1, 2)
+}
+.description {
+  @include place-in-grid(5, 6, 1, 2);
+}
+.audience{
+  @include place-in-grid(6, 7, 1, 2)
+}
+.knowledge {
+  @include place-in-grid(7, 8, 1, 2)
+}
+.happen {
+  @include place-in-grid(8, 9, 1, 2)
+}
+.inputWrap {
+  &Name {
+    @include place-in-grid(2, 3, 2, 4)
+  }
+  &Date {
+    @include place-in-grid(3, 4, 2, 3)
+  }
+  &Time {
+    @include place-in-grid(3, 4, 5, 6)
+  }
+  &Place {
+    @include place-in-grid(4, 5, 2, 4)
+  }
+}
+.textarea {
+  &Description {
+    @include place-in-grid(5, 6, 2, 6)
+  }
+  &Audience {
+    @include place-in-grid(6, 7, 2, 6)
+  }
+  &Knowledge {
+    @include place-in-grid(7, 8, 2, 6)
+  }
+  &Happen {
+    @include place-in-grid(8, 9, 2, 6)
+  }
+}
+
+
