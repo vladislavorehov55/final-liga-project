@@ -1,25 +1,36 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../services/auth/auth.service";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-auth-page',
   templateUrl: './auth-page.component.html',
   styleUrls: ['./auth-page.component.scss']
 })
-export class AuthPageComponent {
-  login: string = ''
-  password: string = ''
+export class AuthPageComponent implements OnInit {
+  form!: FormGroup<{
+    login: FormControl
+    password: FormControl
+  }>
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
+
+  ngOnInit() {
+    this._createForm()
+  }
+
+  private _createForm() {
+    this.form = new FormGroup({
+      login: new FormControl<string>(''),
+      password: new FormControl<string>('')
+    })
+  }
+
 
   submitHandler(event: SubmitEvent) {
     event.preventDefault()
-    this.authService.login(this.login, this.password)
+    this.authService.login(this.form.get('login')?.value, this.form.get('password')?.value)
   }
-  updateLogin(newLoginValue: string) {
-    this.login = newLoginValue
-  }
-  updatePassword(newPasswordValue: string) {
-    this.password = newPasswordValue
-  }
+
 }

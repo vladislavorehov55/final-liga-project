@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthPageComponent } from './auth-page.component';
 import {RouterModule} from "@angular/router";
 import {MyInputModule} from "../../shared/my-input/my-input.module";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 
@@ -13,7 +14,8 @@ import {MyInputModule} from "../../shared/my-input/my-input.module";
   imports: [
     CommonModule,
     RouterModule,
-    MyInputModule
+    MyInputModule,
+    ReactiveFormsModule
   ],
   exports: [AuthPageComponent]
 })

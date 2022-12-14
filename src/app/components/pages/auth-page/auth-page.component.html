@@ -1,7 +1,18 @@
 <div class="page">
-  <form class="form" (submit)="submitHandler($event)">
-    <app-my-input (inputValueChangeEvent)="updateLogin($event)" placeholder="Enter login"></app-my-input>
-    <app-my-input (inputValueChangeEvent)="updatePassword($event)" placeholder="Enter password"></app-my-input>
+  <form class="form" [formGroup]="form" (submit)="submitHandler($event)">
+    <div class="row inputWrap">
+      <input formControlName="login"
+             placeholder="Введите логин"
+             class="input"
+      >
+    </div>
+    <div class="row inputWrap">
+      <input formControlName="password"
+             placeholder="Введите пароль"
+             class="input"
+             type="password"
+      >
+    </div>
     <div class="block">
       <a routerLink="/about" class="link">How to create account?</a>
       <button class="btnLogin">Log in</button>
