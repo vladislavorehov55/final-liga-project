@@ -80,6 +80,8 @@
   height: 60px;
   resize: none;
   background: inherit;
+  border-radius: 5px;
+  border: 3px solid #4C3F78;
 }
 .textarea {
   &Description {
@@ -110,5 +112,6 @@
   border: 1px solid #fff;
   cursor: pointer;
 }
-
-
+.label {
+  align-self: center;
+}

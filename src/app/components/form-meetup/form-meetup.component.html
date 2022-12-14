@@ -2,37 +2,37 @@
   <form class="form" [formGroup]="form">
     <span class="close" (click)="closeFormHandler()">&times;</span>
     <h2 class="title">{{title}}</h2>
-    <label class="name">Название</label>
-    <div class="inputWrapName">
-      <input formControlName="name">
+    <label class="label name">Название</label>
+    <div class="inputWrapName inputWrap">
+      <input formControlName="name" class="input">
     </div>
 
-    <label class="date">Дата</label>
-    <div class="inputWrapDate">
-      <input formControlName="date">
+    <label class="label date">Дата</label>
+    <div class="inputWrapDate inputWrap">
+      <input formControlName="date" class="input">
     </div>
 
-    <label class="time">Время</label>
-    <div class="inputWrapTime">
-      <input type="text" formControlName="time">
+    <label class="label time">Время</label>
+    <div class="inputWrapTime inputWrap">
+      <input type="text" formControlName="time" class="input">
     </div>
 
-    <label class="place">Место</label>
-    <div class="inputWrapPlace">
-      <input type="text" formControlName="place">
+    <label class="label place">Место</label>
+    <div class="inputWrapPlace inputWrap">
+      <input type="text" formControlName="place" class="input">
 
     </div>
 
-    <label class="description">Описание</label>
+    <label class="label description">Описание</label>
     <textarea class="textareaDescription" formControlName="description"></textarea>
 
-    <label class="audience">Целевая аудитория</label>
+    <label class="label audience">Целевая аудитория</label>
     <textarea class="textareaAudience" formControlName="audience"></textarea>
 
-    <label class="knowledge">Что нужно знать</label>
+    <label class="label knowledge">Что нужно знать</label>
     <textarea class="textareaKnowledge" formControlName="knowledge"></textarea>
 
-    <label class="happen">Что будет</label>
+    <label class="label happen">Что будет</label>
     <textarea class="textareaHappen" formControlName="happen"></textarea>
 
     <div class="btnWrap">
