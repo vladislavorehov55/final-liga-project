@@ -1,0 +1,53 @@
+<div class="modal" *ngIf="isShow">
+  <form class="form" [formGroup]="form">
+    <span class="close" (click)="closeFormHandler()">&times;</span>
+    <h2 class="title">{{title}}</h2>
+    <label class="name">Название</label>
+    <div class="inputWrapName">
+      <input formControlName="name">
+    </div>
+
+    <label class="date">Дата</label>
+    <div class="inputWrapDate">
+      <input formControlName="date">
+    </div>
+
+    <label class="time">Время</label>
+    <div class="inputWrapTime">
+      <input type="text" formControlName="time">
+    </div>
+
+    <label class="place">Место</label>
+    <div class="inputWrapPlace">
+      <input type="text" formControlName="place">
+
+    </div>
+
+    <label class="description">Описание</label>
+    <textarea class="textareaDescription" formControlName="description"></textarea>
+
+    <label class="audience">Целевая аудитория</label>
+    <textarea class="textareaAudience" formControlName="audience"></textarea>
+
+    <label class="knowledge">Что нужно знать</label>
+    <textarea class="textareaKnowledge" formControlName="knowledge"></textarea>
+
+    <label class="happen">Что будет</label>
+    <textarea class="textareaHappen" formControlName="happen"></textarea>
+
+    <div class="btnWrap">
+      <button *ngIf="isCreating; else elseBlock"
+              class="btn"
+              type="submit"
+              (click)="addMeetupHandler()"
+      >
+        Создать
+      </button>
+      <ng-template #elseBlock>
+        <button class="btn">Сохранить</button>
+      </ng-template>
+    </div>
+
+  </form>
+
+</div>
