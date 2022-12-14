@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {IMeetup} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs";
+import {from, map, tap, toArray} from "rxjs";
+import {IFormFields} from "../../components/form-meetup/form-meetup.component";
 
 @Injectable()
 export class MeetupService {
@@ -66,5 +67,9 @@ export class MeetupService {
         })
       )
       .subscribe((data) => this._meetups = data)
+  }
+
+  updateMeetups(newMeetups: IMeetup[]) {
+    this._meetups = newMeetups
   }
 }
