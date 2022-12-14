@@ -5,14 +5,15 @@ import {FormControl, FormGroup} from "@angular/forms";
 
 export interface IFormFields {
   name: string
+  description: string
   date: string
   time: string
-  place: string
-  description: string
-  audience: string
-  knowledge: string
-  happen: string,
   duration: number
+  location: string
+  target_audience: string
+  need_to_know: string
+  will_happen: string,
+  reason_to_come: string
 }
 
 @Component({
@@ -61,12 +62,13 @@ export class FormMeetupComponent implements OnInit{
       name: new FormControl(this.formMeetupService.formFieldsValue.name),
       date: new FormControl(this.formMeetupService.formFieldsValue.date),
       time: new FormControl(this.formMeetupService.formFieldsValue.time),
-      place: new FormControl(this.formMeetupService.formFieldsValue.place),
+      location: new FormControl(this.formMeetupService.formFieldsValue.location),
       description: new FormControl(this.formMeetupService.formFieldsValue.description),
-      audience: new FormControl(this.formMeetupService.formFieldsValue.audience),
-      knowledge: new FormControl(this.formMeetupService.formFieldsValue.knowledge),
-      happen: new FormControl(this.formMeetupService.formFieldsValue.happen),
-      duration: new FormControl(this.formMeetupService.formFieldsValue.duration)
+      target_audience: new FormControl(this.formMeetupService.formFieldsValue.target_audience),
+      need_to_know: new FormControl(this.formMeetupService.formFieldsValue.need_to_know),
+      will_happen: new FormControl(this.formMeetupService.formFieldsValue.will_happen),
+      duration: new FormControl(this.formMeetupService.formFieldsValue.duration),
+      reason_to_come: new FormControl(this.formMeetupService.formFieldsValue.reason_to_come)
     })
   }
 }

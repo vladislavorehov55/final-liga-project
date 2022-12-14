@@ -12,6 +12,7 @@
   background: $bg-dark;
 }
 .form {
+  max-height: 500px;
   padding: 10px;
   position: fixed;
   width: 90%;
@@ -19,6 +20,7 @@
   row-gap: 10px;
   grid-template-columns: 1fr 1fr 1fr 20px 1fr;
   background: $bg-light;
+  overflow-y: auto;
 }
 
 @mixin place-in-grid($gridRowStart, $gridRowEnd, $gridColStart, $gridColEnd) {
@@ -65,6 +67,9 @@
 .duration {
   @include place-in-grid(10, 11, 1, 2)
 }
+.reason {
+  @include place-in-grid(11, 12, 1, 2)
+}
 .inputWrap {
   &Name {
     @include place-in-grid(3, 4, 2, 4)
@@ -80,6 +85,9 @@
   }
   &Duration {
     @include place-in-grid(10, 11, 2, 3)
+  }
+  &Reason {
+    @include place-in-grid(11, 12, 2, 6)
   }
 }
 .textarea {
@@ -106,9 +114,13 @@
     @include place-in-grid(9, 10, 2, 6);
     @extend .textarea
   }
+  &Reason {
+    @include place-in-grid(11, 12, 2, 6);
+    @extend .textarea
+  }
 }
 .btnWrap {
-  @include place-in-grid(11, 12, 1, 6);
+  @include place-in-grid(12, 13, 1, 6);
   justify-self: center;
 }
 .btn {

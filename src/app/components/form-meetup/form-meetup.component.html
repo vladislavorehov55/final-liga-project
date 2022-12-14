@@ -19,7 +19,7 @@
 
     <label class="label place">Место</label>
     <div class="inputWrapPlace inputWrap">
-      <input type="text" formControlName="place" class="input">
+      <input type="text" formControlName="location" class="input">
 
     </div>
 
@@ -27,18 +27,20 @@
     <textarea class="textareaDescription" formControlName="description"></textarea>
 
     <label class="label audience">Целевая аудитория</label>
-    <textarea class="textareaAudience" formControlName="audience"></textarea>
+    <textarea class="textareaAudience" formControlName="target_audience"></textarea>
 
     <label class="label knowledge">Что нужно знать</label>
-    <textarea class="textareaKnowledge" formControlName="knowledge"></textarea>
+    <textarea class="textareaKnowledge" formControlName="need_to_know"></textarea>
 
     <label class="label happen">Что будет</label>
-    <textarea class="textareaHappen" formControlName="happen"></textarea>
+    <textarea class="textareaHappen" formControlName="will_happen"></textarea>
 
     <label class="label duration">Длительность(мин.)</label>
     <div class="inputWrap inputWrapDuration">
       <input class="input" formControlName="duration">
     </div>
+    <label class="label reason">Зачем приходить</label>
+    <textarea class="textareaReason" formControlName="reason_to_come"></textarea>
     <div class="btnWrap">
       <button *ngIf="isCreating; else elseBlock"
               class="btn"

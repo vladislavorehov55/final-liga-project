@@ -14,12 +14,13 @@ export class FormMeetupService {
     name: '',
     date: '',
     time: '',
-    place: '',
+    location: '',
     description: '',
-    audience: '',
-    knowledge: '',
-    happen: '',
-    duration: 90
+    target_audience: '',
+    need_to_know: '',
+    will_happen: '',
+    duration: 90,
+    reason_to_come: ''
   }
   isCreating: boolean = true
   isShow: boolean = true
