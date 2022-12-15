@@ -18,6 +18,9 @@ export class MeetupItemComponent implements OnInit{
   get subscribersCount() {
     return this.meetup.users.length
   }
+  get meetupTime() {
+    return this.meetup.time
+  }
   setOpened(id: number) {
     this._meetupService.setMeetupOpened(id)
   }
