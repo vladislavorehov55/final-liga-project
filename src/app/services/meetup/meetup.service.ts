@@ -2,8 +2,11 @@ import {Injectable} from '@angular/core';
 import {IMeetup} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {from, map, tap, toArray} from "rxjs";
+import {concatAll, from, map, tap, toArray} from "rxjs";
 import {IFormFields} from "../../components/form-meetup/form-meetup.component";
+import {
+  toR3ClassMetadata
+} from "@angular/compiler-cli/linker/src/file_linker/partial_linkers/partial_class_metadata_linker_1";
 
 @Injectable()
 export class MeetupService {
@@ -17,9 +20,9 @@ export class MeetupService {
   getDataMeetups() {
     this.http.get<IMeetup[]>(`${this.environmentService.environment.apiUrl}/meetup`)
       .pipe(
-        map(meetups => {
-          return meetups.map(meetup => ({...meetup, isOpened: false}))
-        })
+        concatAll(),
+        map(meetup => ({...meetup, isOpened: false})),
+        toArray()
       )
       .subscribe((data) => {
         console.log('meetups', data)
