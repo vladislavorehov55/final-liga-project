@@ -46,7 +46,24 @@ export class FormMeetupComponent implements OnInit{
   }
 
   addMeetupHandler() {
-
+    const newMeetup: any = {}
+    const timeComponents: [number, number, number, number, number] = [0, 0, 0, 0, 0]
+    for (let field in this.form.controls) {
+      if (field === 'date') {
+        timeComponents.splice(0, 3, ...this.form.controls[field].value.split('.').reverse().map((item: string) => +item))
+      }
+      else if (field === 'time') {
+        timeComponents.splice(3, 2, ...this.form.controls[field].value.split(':').map((item: string) => +item))
+      }
+      else {
+        newMeetup[field] = this.form.controls[field].value
+      }
+    }
+    timeComponents[1] = timeComponents[1] - 1
+    timeComponents[3] = timeComponents[3] + 3
+    newMeetup['time'] = new Date(...timeComponents).toISOString()
+    console.log('newMeetup', newMeetup)
+    this.formMeetupService.addMeetup(newMeetup)
   }
 
   editMeetupHandler() {

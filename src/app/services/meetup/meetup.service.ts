@@ -22,6 +22,7 @@ export class MeetupService {
         })
       )
       .subscribe((data) => {
+        console.log('meetups', data)
         this._meetups = data
       })
   }
@@ -69,7 +70,5 @@ export class MeetupService {
       .subscribe((data) => this._meetups = data)
   }
 
-  updateMeetups(newMeetups: IMeetup[]) {
-    this._meetups = newMeetups
-  }
+
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {IFormFields} from "../../components/form-meetup/form-meetup.component";
 import {IMeetup} from "../../models/meetup";
-import {map} from "rxjs";
+import {map, tap} from "rxjs";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
 import {MeetupService} from "../meetup/meetup.service";
@@ -38,13 +38,13 @@ export class FormMeetupService {
   }
 
   addMeetup(meetup: IMeetupAddFieldsReq) {
-    this.http.post<IMeetup[]>(`${this.environmentService.environment.apiUrl}/meetup`, {...meetup})
-      .pipe(
-        map(meetups => {
-          return meetups.map(meetup => ({...meetup, isOpened: false}))
-        })
-      )
-      .subscribe(data => this.meetupService.updateMeetups(data))
+    // this.http.delete(`${this.environmentService.environment.apiUrl}/meetup/96`)
+    //   .subscribe(data => console.log(data))
+
+    this.http.post<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup`, {...meetup})
+      .subscribe(data => this.meetupService.getDataMeetups())
+
   }
 
 }
+
