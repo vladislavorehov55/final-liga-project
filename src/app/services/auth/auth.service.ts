@@ -1,12 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {EnvironmentService} from "../environment/environment.service";
-import {map} from "rxjs";
+import {BehaviorSubject, map} from "rxjs";
 import {Router} from "@angular/router";
 import {IUser} from "../../models/user";
 
 @Injectable()
 export class AuthService {
+
+  userSubject = new BehaviorSubject<IUser | null>(this.user)
+
   baseUrl: string = `${this.environmentService.environment.apiUrl}/auth`
 
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private router: Router) {
@@ -24,11 +27,14 @@ export class AuthService {
         })
       ).subscribe((token) => {
         if (token) {
+          const parsedToken = this.parseJwt(token)
+          this.userSubject.next(parsedToken)
           this.router.navigate([''])
         }
     })
   }
   logout() {
+    this.userSubject.next(null)
     localStorage.removeItem('meetups_app_auth_token')
     this.router.navigate(['auth'])
   }
