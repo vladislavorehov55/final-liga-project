@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IMeetup} from "../../models/meetup";
+import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
 import {concatAll, from, map, tap, toArray} from "rxjs";
@@ -21,13 +21,23 @@ export class MeetupService {
     this.http.get<IMeetup[]>(`${this.environmentService.environment.apiUrl}/meetup`)
       .pipe(
         concatAll(),
-        map(meetup => ({...meetup, isOpened: false})),
+        map(meetup => ({...meetup, isOpened: false, status: MeetupStatusEnum.PLANNED})),
         toArray()
       )
       .subscribe((data) => {
         console.log('meetups', data)
         this._meetups = data
       })
+  }
+
+  updateMeetupStatus(meetupID: number, newStatus: MeetupStatusEnum) {
+    for (let i = 0; i < this.meetups.length; i++) {
+      if (this.meetups[i].id === meetupID) {
+        let meetup = this.meetups[i]
+        meetup = {...meetup, status: newStatus}
+        break
+      }
+    }
   }
 
   setMeetupOpened(id: number) {

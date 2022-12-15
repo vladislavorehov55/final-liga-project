@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IMeetup} from "../../models/meetup";
+import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
 import {MeetupService} from "../../services/meetup/meetup.service";
 import {AuthService} from "../../services/auth/auth.service";
 import {IUser} from "../../models/user";
@@ -10,6 +10,8 @@ import {IUser} from "../../models/user";
   styleUrls: ['./meetup-item.component.scss']
 })
 export class MeetupItemComponent implements OnInit{
+  meetupStatus = ''
+
   constructor(private _meetupService: MeetupService, private _authService: AuthService) {}
   ngOnInit() {
   }
@@ -20,6 +22,26 @@ export class MeetupItemComponent implements OnInit{
   }
   get meetupTime() {
     return this.meetup.time
+  }
+
+  get contentUnderDate() {
+    const meetupID = this.meetup.id
+    const meetupStart = Date.parse(this.meetupTime)
+    const meetupEnd = meetupStart + this.meetup.duration * 60000
+    const currentDate = Date.now()
+    if (currentDate > meetupEnd) {
+      this._meetupService.updateMeetupStatus(meetupID, MeetupStatusEnum.CONDUCTED)
+      return 'Проведен'
+    }
+    else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
+      this._meetupService.updateMeetupStatus(meetupID, MeetupStatusEnum.IN_PROGRESS)
+      return 'Идет'
+    }
+    else if (currentDate < meetupStart) {
+      this._meetupService.updateMeetupStatus(meetupID, MeetupStatusEnum.PLANNED)
+      return this.meetup.location
+    }
+    return
   }
   setOpened(id: number) {
     this._meetupService.setMeetupOpened(id)

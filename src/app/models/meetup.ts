@@ -9,6 +9,7 @@ export interface IMeetup {
   reason_to_come: string
   time: string
   createdBy: number
+  duration: number
   owner: {
     id: number
     email: string
@@ -24,4 +25,10 @@ export interface IMeetup {
     }
   ]
   isOpened: boolean
+  status: MeetupStatusEnum
+}
+export enum MeetupStatusEnum {
+  'PLANNED' = 'planned',
+  'IN_PROGRESS' = 'in progress',
+  'CONDUCTED' = 'conducted'
 }

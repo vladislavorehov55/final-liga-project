@@ -58,7 +58,6 @@ export class FormMeetupComponent implements OnInit{
       }
     }
     timeComponents[1] = timeComponents[1] - 1
-    timeComponents[3] = timeComponents[3] + 3
     newMeetup['time'] = new Date(...timeComponents).toISOString()
     console.log('newMeetup', newMeetup)
     this.formMeetupService.addMeetup(newMeetup)
