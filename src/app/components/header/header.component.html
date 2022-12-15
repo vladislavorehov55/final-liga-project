@@ -1,0 +1,37 @@
+<header class="header">
+  <div class="logoWrap">
+    <h1 class="logoTitle">MeetUps</h1>
+    <div>
+      <div>
+        <img src="./assets/logo-one.png" alt="ит-философия">
+      </div>
+      <div>
+        <img src="./assets/logo-two.png" alt="лига">
+      </div>
+    </div>
+  </div>
+  <nav>
+    <ul class="navList">
+      <li class="navItem">
+        <a class="navLink"
+           routerLink=""
+           routerLinkActive="activeLink"
+           [routerLinkActiveOptions]="{exact:true}"
+        >
+          Все митапы
+        </a>
+      </li>
+      <li class="navItem">
+        <a class="navLink"
+           routerLink="/about"
+           routerLinkActive="activeLink"
+        >
+          Мои митапы
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <button class="btnLogout">
+    <app-svg-generator type="icon-exit"></app-svg-generator>
+  </button>
+</header>

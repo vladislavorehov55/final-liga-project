@@ -1,0 +1,37 @@
+@import "../../scss-var/variables";
+.header {
+  padding: 20px;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #E9E9E9;
+  background: $bg-light;
+}
+.logoWrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.logoTitle {
+  margin-right: 5px;
+}
+.navList {
+  list-style: none;
+  display: flex;
+}
+.navItem:first-child {
+  margin-right: 5px;
+}
+.navLink {
+  color: inherit;
+  text-decoration: none;
+}
+.activeLink {
+  text-decoration: underline;
+}
+.btnLogout {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
