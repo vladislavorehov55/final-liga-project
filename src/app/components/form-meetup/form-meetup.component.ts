@@ -19,9 +19,7 @@ export interface IFormFields {
 @Component({
   selector: 'app-form-meetup',
   templateUrl: './form-meetup.component.html',
-  styleUrls: ['./form-meetup.component.scss'],
-  providers: [FormMeetupService]
-
+  styleUrls: ['./form-meetup.component.scss']
 })
 export class FormMeetupComponent implements OnInit{
   form!: FormGroup

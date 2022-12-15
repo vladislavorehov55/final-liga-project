@@ -2,3 +2,19 @@
   padding: 10px;
   min-height: 100vh;
 }
+.btnWrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+.btn {
+  background: #4C3F78;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}

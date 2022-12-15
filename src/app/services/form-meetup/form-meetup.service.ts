@@ -7,7 +7,9 @@ import {HttpClient} from "@angular/common/http";
 import {MeetupService} from "../meetup/meetup.service";
 import {IMeetupAddFieldsReq} from "../../models/meetup-add-fields-req";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FormMeetupService {
   title: string = 'Создание митапа'
   formFieldsValue: IFormFields = {
@@ -23,7 +25,7 @@ export class FormMeetupService {
     reason_to_come: ''
   }
   isCreating: boolean = true
-  isShow: boolean = true
+  isShow: boolean = false
 
   constructor(private environmentService: EnvironmentService, private http: HttpClient,
               private meetupService: MeetupService) {
@@ -36,14 +38,13 @@ export class FormMeetupService {
   closeForm() {
     this.isShow = false
   }
+  openForm() {
+    this.isShow = true
+  }
 
   addMeetup(meetup: IMeetupAddFieldsReq) {
-    // this.http.delete(`${this.environmentService.environment.apiUrl}/meetup/96`)
-    //   .subscribe(data => console.log(data))
-
     this.http.post<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup`, {...meetup})
       .subscribe(data => this.meetupService.getDataMeetups())
-
   }
 
 }
