@@ -13,6 +13,11 @@ const routes: Routes = [
   {
     path: 'auth',
     component: AuthPageComponent
+  },
+  {
+    path: 'my-meetups',
+    component: MeetupsPageComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

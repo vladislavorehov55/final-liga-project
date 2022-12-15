@@ -7,14 +7,21 @@ import {IFormFields} from "../../components/form-meetup/form-meetup.component";
 import {
   toR3ClassMetadata
 } from "@angular/compiler-cli/linker/src/file_linker/partial_linkers/partial_class_metadata_linker_1";
+import {IUser} from "../../models/user";
+import {Router} from "@angular/router";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable()
 export class MeetupService {
   private _meetups: Array<IMeetup> = []
   get meetups() {
+    if (this._router.url === '/my-meetups') {
+      const {id} = this._authService.user as IUser
+      return this._meetups.filter(meetup => meetup.owner.id === id)
+    }
     return this._meetups
   }
-  constructor(private environmentService: EnvironmentService, private http: HttpClient) {
+  constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
 
   getDataMeetups() {
