@@ -1,5 +1,5 @@
 <li class="wrapper">
-  <div [ngClass]="{overlay: true, conducted: isConducted}"></div>
+  <div [ngClass]="{overlay: true}" [hidden]="isHidden"></div>
   <div class="topBlock">
     <div>
       <h2 class="title">{{meetup.name}}</h2>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="btnsWrap" *ngIf="url === '/'; else elseBtnsWrap">
-      <div *ngIf="!isConducted">
+      <div *ngIf="isHidden">
         <button class="btnYes"
                 *ngIf="willGo();else elseBlock"
                 (click)="subscribe(meetup.id, user.id)"
@@ -59,7 +59,7 @@
 
     <ng-template #elseBtnsWrap>
       <div class="btnsWrap">
-        <div *ngIf="!isConducted" class="wrap">
+        <div *ngIf="isHidden" class="wrap">
           <button class="btnDelete" (click)="deleteMeetupHandler()">Удалить</button>
           <button class="btnYes" (click)="editMeetupHandler()">Изменить</button>
         </div>

@@ -14,10 +14,6 @@
   left: 0;
   opacity: 0.5;
   background: black;
-  display: none;
-}
-.conducted {
-  display: block;
 }
 .topBlock {
   display: flex;
@@ -96,7 +92,7 @@
     background: #B85526;
     margin-left: 5px;
     position: relative;
-    z-index: 100;
+    z-index: 1;
   }
   &Delete {
     @extend %btn;

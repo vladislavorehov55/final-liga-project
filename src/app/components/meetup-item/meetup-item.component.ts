@@ -15,11 +15,11 @@ import {FormMeetupService} from "../../services/form-meetup/form-meetup.service"
 export class MeetupItemComponent implements OnInit{
 
 
-  get isConducted() {
-    if (this.meetup.status === MeetupStatusEnum.CONDUCTED) {
-      return true
+  get isHidden() {
+    if (this.meetup.status === MeetupStatusEnum.CONDUCTED || this.meetup.status === MeetupStatusEnum.IN_PROGRESS) {
+      return false
     }
-    return false
+    return true
   }
 
   constructor(private _meetupService: MeetupService,
