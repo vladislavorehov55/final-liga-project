@@ -56,7 +56,7 @@
     <ng-template #elseBtnsWrap>
       <div class="btnsWrap">
         <button class="btnDelete" (click)="deleteMeetupHandler()">Удалить</button>
-        <button class="btnYes">Изменить</button>
+        <button class="btnYes" (click)="editMeetupHandler()">Изменить</button>
         <button class="btnArrow" (click)="setOpened(meetup.id)">
           <app-svg-generator type="arrow"
                              [ngClass]="{'arrow-up': meetup.isOpened}"

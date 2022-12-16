@@ -10,6 +10,7 @@ import {
 import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
+import {FormGroup} from "@angular/forms";
 
 @Injectable()
 export class MeetupService {
@@ -94,6 +95,23 @@ export class MeetupService {
     this.http.delete<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`)
       .subscribe(meetup => {
         this._meetups = this.meetups.filter(item => item.id !== meetup.id)
+      })
+  }
+
+  editMeetup(meetupID: number, form: FormGroup) {
+    const editedMeetup: any = {}
+
+    this.http.put<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`, editedMeetup)
+      .pipe(
+        map(meetup => ({...meetup, isOpened: false, status: MeetupStatusEnum.PLANNED}))
+      )
+      .subscribe(meetup => {
+        for (let i = 0; i < this.meetups.length; i++) {
+          if (this.meetups[i].id === meetup.id) {
+            this._meetups[i] = meetup
+            break
+          }
+        }
       })
   }
 

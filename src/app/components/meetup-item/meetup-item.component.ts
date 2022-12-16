@@ -4,6 +4,7 @@ import {MeetupService} from "../../services/meetup/meetup.service";
 import {AuthService} from "../../services/auth/auth.service";
 import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
+import {FormMeetupService} from "../../services/form-meetup/form-meetup.service";
 
 @Component({
   selector: 'app-meetup-item',
@@ -13,8 +14,10 @@ import {Router} from "@angular/router";
 export class MeetupItemComponent implements OnInit{
   meetupStatus = ''
 
-  constructor(private _meetupService: MeetupService, private _authService: AuthService,
-              private _router: Router) {}
+  constructor(private _meetupService: MeetupService,
+              private _authService: AuthService,
+              private _router: Router,
+              private _formMeetupService: FormMeetupService) {}
   ngOnInit() {
   }
   @Input()
@@ -73,5 +76,15 @@ export class MeetupItemComponent implements OnInit{
   deleteMeetupHandler() {
     this._meetupService.deleteMeetup(this.meetup.id)
   }
-
+  editMeetupHandler() {
+    this._formMeetupService.isShow = true
+    this._formMeetupService.isCreating = false
+    const {id, name, description, duration, location, target_audience, need_to_know,
+      will_happen, reason_to_come, time } = this.meetup
+    const arr = time.split(' ')
+    this._formMeetupService.setFormMeetupContent('Редактирвоание митапа', {
+      id, name, description, duration, location, target_audience, need_to_know,
+      will_happen, reason_to_come, date: arr[0], time: arr[1]
+    })
+  }
 }

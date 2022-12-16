@@ -11,7 +11,7 @@ import {IMeetupAddFieldsReq} from "../../models/meetup-add-fields-req";
   providedIn: 'root'
 })
 export class FormMeetupService {
-  title: string = 'Создание митапа'
+  private _title: string = 'Создание митапа'
   formFieldsValue: IFormFields = {
     name: '',
     date: '',
@@ -24,14 +24,30 @@ export class FormMeetupService {
     duration: 90,
     reason_to_come: ''
   }
-  isCreating: boolean = true
+  private _isCreating: boolean = true
   isShow: boolean = false
 
   constructor(private environmentService: EnvironmentService, private http: HttpClient,
               private meetupService: MeetupService) {
   }
+  get title() {
+    return this._title
+  }
+  set title(newTitle: string) {
+    this._title = newTitle
+  }
+
+  get isCreating() {
+    return this._isCreating
+  }
+  set isCreating(flag: boolean) {
+    this._isCreating = flag
+  }
+
+
 
   setFormMeetupContent(title: string, formFieldsValue: IFormFields) {
+    console.log('formFieldsValue', formFieldsValue)
     this.title = title
     this.formFieldsValue = formFieldsValue
   }

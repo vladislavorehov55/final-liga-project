@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {FormMeetupService} from "../../services/form-meetup/form-meetup.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import {MeetupService} from "../../services/meetup/meetup.service";
 
 
 export interface IFormFields {
+  id?: number
   name: string
   description: string
   date: string
@@ -64,7 +66,7 @@ export class FormMeetupComponent implements OnInit{
   }
 
   editMeetupHandler() {
-
+    console.log(this.form.value)
   }
 
   closeFormHandler() {
@@ -85,4 +87,5 @@ export class FormMeetupComponent implements OnInit{
       reason_to_come: new FormControl(this.formMeetupService.formFieldsValue.reason_to_come)
     })
   }
+
 }
