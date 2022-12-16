@@ -50,9 +50,7 @@
       </div>
 
       <button class="btnArrow" (click)="setOpened(meetup.id)">
-        <app-svg-generator type="arrow"
-                           [ngClass]="{'arrow-up': meetup.isOpened}"
-        >
+        <app-svg-generator type="arrow" [ngClass]="{'arrow-up': meetup.isOpened}">
         </app-svg-generator>
       </button>
     </div>

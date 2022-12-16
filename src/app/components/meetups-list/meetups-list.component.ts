@@ -13,7 +13,7 @@ export class MeetupsListComponent implements OnInit {
     this._meetupService.getDataMeetups()
   }
 
-  get meetups() {
-    return this._meetupService.meetups
+  get currentMeetups() {
+    return this._meetupService.searchedMeetups ? this._meetupService.searchedMeetups : this._meetupService.meetups
   }
 }

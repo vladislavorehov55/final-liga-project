@@ -142,5 +142,28 @@ export class MeetupService {
       })
   }
 
+  private _searchedMeetups: IMeetup[] | null = null
+
+  get searchedMeetups() {
+    return this._searchedMeetups
+  }
+  set searchedMeetups(newMeetups) {
+    this._searchedMeetups = newMeetups
+  }
+
+  searchMeetups(value: string) {
+    if (value === '') {
+      this.searchedMeetups = null
+      return
+    }
+    this.searchedMeetups = this.meetups.filter(meetup => {
+      return meetup.name.includes(value) || meetup.description.includes(value) ||
+        meetup.location.includes(value) || meetup.duration === +value ||
+        meetup.target_audience.includes(value) || meetup.will_happen.includes(value) ||
+        meetup.need_to_know.includes(value) || meetup.reason_to_come.includes(value) ||
+        new Date(meetup.time).toLocaleString().includes(value)
+    })
+  }
+
 
 }

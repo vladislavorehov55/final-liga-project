@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MeetupsPageComponent } from './meetups-page.component';
 import {MeetupsListModule} from "../../meetups-list/meetups-list.module";
 import {FormMeetupModule} from "../../form-meetup/form-meetup.module";
+import {SearchModule} from "../../search/search.module";
 
 
 
@@ -13,7 +14,8 @@ import {FormMeetupModule} from "../../form-meetup/form-meetup.module";
   imports: [
     CommonModule,
     MeetupsListModule,
-    FormMeetupModule
+    FormMeetupModule,
+    SearchModule
   ],
   exports: [MeetupsPageComponent]
 })
