@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import {FormMeetupService} from "../../services/form-meetup/form-meetup.service";
-import {FormControl, FormGroup} from "@angular/forms";
 import {MeetupService} from "../../services/meetup/meetup.service";
 
 
 export interface IFormFields {
-  id?: number
   name: string
   description: string
   date: string
@@ -23,26 +21,26 @@ export interface IFormFields {
   templateUrl: './form-meetup.component.html',
   styleUrls: ['./form-meetup.component.scss']
 })
-export class FormMeetupComponent implements OnInit{
-  form!: FormGroup
+export class FormMeetupComponent{
 
-  constructor(private formMeetupService: FormMeetupService) {
+  constructor(private _formMeetupService: FormMeetupService, private _meetupService: MeetupService) {
   }
-
+  get form() {
+    return this._formMeetupService.form
+  }
   get title() {
-    return this.formMeetupService.title
+    return this._formMeetupService.title
   }
 
   get isCreating() {
-    return this.formMeetupService.isCreating
+    return this._formMeetupService.isCreating
   }
 
   get isShow() {
-    return this.formMeetupService.isShow
+    return this._formMeetupService.isShow
   }
 
   ngOnInit() {
-    this._createForm()
   }
 
   addMeetupHandler() {
@@ -62,30 +60,15 @@ export class FormMeetupComponent implements OnInit{
     timeComponents[1] = timeComponents[1] - 1
     newMeetup['time'] = new Date(...timeComponents).toISOString()
     console.log('newMeetup', newMeetup)
-    this.formMeetupService.addMeetup(newMeetup)
+    this._formMeetupService.addMeetup(newMeetup)
   }
 
   editMeetupHandler() {
-    console.log(this.form.value)
+    this._meetupService.editMeetup(this._formMeetupService.editedMeetupID, this.form)
   }
 
   closeFormHandler() {
-    this.formMeetupService.closeForm()
-  }
-
-  private _createForm() {
-    this.form = new FormGroup({
-      name: new FormControl(this.formMeetupService.formFieldsValue.name),
-      date: new FormControl(this.formMeetupService.formFieldsValue.date),
-      time: new FormControl(this.formMeetupService.formFieldsValue.time),
-      location: new FormControl(this.formMeetupService.formFieldsValue.location),
-      description: new FormControl(this.formMeetupService.formFieldsValue.description),
-      target_audience: new FormControl(this.formMeetupService.formFieldsValue.target_audience),
-      need_to_know: new FormControl(this.formMeetupService.formFieldsValue.need_to_know),
-      will_happen: new FormControl(this.formMeetupService.formFieldsValue.will_happen),
-      duration: new FormControl(this.formMeetupService.formFieldsValue.duration),
-      reason_to_come: new FormControl(this.formMeetupService.formFieldsValue.reason_to_come)
-    })
+    this._formMeetupService.closeForm()
   }
 
 }

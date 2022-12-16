@@ -2,26 +2,28 @@ import {Injectable} from '@angular/core';
 import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {concatAll, from, map, tap, toArray} from "rxjs";
-import {IFormFields} from "../../components/form-meetup/form-meetup.component";
-import {
-  toR3ClassMetadata
-} from "@angular/compiler-cli/linker/src/file_linker/partial_linkers/partial_class_metadata_linker_1";
+import {concat, concatAll, filter, from, map, Observable, of, tap, toArray} from "rxjs";
 import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
+import {ajax} from "rxjs/ajax";
 
 @Injectable()
 export class MeetupService {
+  private _baseURL = `${this.environmentService.environment.apiUrl}`
   private _meetups: Array<IMeetup> = []
   get meetups() {
+    console.log('getter meetups',)
     if (this._router.url === '/my-meetups') {
       const {id} = this._authService.user as IUser
-      return this._meetups.filter(meetup => meetup.owner.id === id)
+      return this._meetups.filter(meetup => {
+        return meetup.owner.id === id
+      })
     }
     return this._meetups
   }
+
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
 
@@ -33,7 +35,6 @@ export class MeetupService {
         toArray()
       )
       .subscribe((data) => {
-        console.log('meetups', data)
         this._meetups = data
       })
   }
@@ -98,20 +99,32 @@ export class MeetupService {
       })
   }
 
-  editMeetup(meetupID: number, form: FormGroup) {
-    const editedMeetup: any = {}
+  private _getMeetUpToRequest(form: FormGroup) {
+    const timeComponents: [number, number, number, number, number] = [0, 0, 0, 0, 0]
+    timeComponents.splice(0, 3, ...form.value['date'].split('.').reverse().map((item: string) => +item))
+    timeComponents.splice(3, 2, ...form.value['time'].split(':').map((item: string) => +item))
+    timeComponents[1] = timeComponents[1] - 1
+    const {
+      name,
+      description,
+      location,
+      duration,
+      target_audience,
+      need_to_know,
+      will_happen,
+      reason_to_come
+    } = form.value
+    return {
+      name, description, location, duration, target_audience,
+      need_to_know, will_happen, reason_to_come, time: new Date(...timeComponents).toISOString()
+    }
+  }
 
-    this.http.put<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`, editedMeetup)
-      .pipe(
-        map(meetup => ({...meetup, isOpened: false, status: MeetupStatusEnum.PLANNED}))
-      )
+  editMeetup(meetupID: number, form: FormGroup) {
+    const editedMeetUp = this._getMeetUpToRequest(form)
+    this.http.put<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`, editedMeetUp)
       .subscribe(meetup => {
-        for (let i = 0; i < this.meetups.length; i++) {
-          if (this.meetups[i].id === meetup.id) {
-            this._meetups[i] = meetup
-            break
-          }
-        }
+        this.getDataMeetups()
       })
   }
 

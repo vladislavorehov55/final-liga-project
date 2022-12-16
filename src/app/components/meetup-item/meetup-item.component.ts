@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
 import {MeetupService} from "../../services/meetup/meetup.service";
 import {AuthService} from "../../services/auth/auth.service";
@@ -9,7 +9,8 @@ import {FormMeetupService} from "../../services/form-meetup/form-meetup.service"
 @Component({
   selector: 'app-meetup-item',
   templateUrl: './meetup-item.component.html',
-  styleUrls: ['./meetup-item.component.scss']
+  styleUrls: ['./meetup-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeetupItemComponent implements OnInit{
   meetupStatus = ''
@@ -77,14 +78,14 @@ export class MeetupItemComponent implements OnInit{
     this._meetupService.deleteMeetup(this.meetup.id)
   }
   editMeetupHandler() {
+    this._formMeetupService.editedMeetupID = this.meetup.id
     this._formMeetupService.isShow = true
-    this._formMeetupService.isCreating = false
-    const {id, name, description, duration, location, target_audience, need_to_know,
+    const {name, description, duration, location, target_audience, need_to_know,
       will_happen, reason_to_come, time } = this.meetup
-    const arr = time.split(' ')
-    this._formMeetupService.setFormMeetupContent('Редактирвоание митапа', {
-      id, name, description, duration, location, target_audience, need_to_know,
-      will_happen, reason_to_come, date: arr[0], time: arr[1]
+    const arr = new Date(time).toLocaleString().split(', ')
+    this._formMeetupService.setForm(false, 'Редактирвоание митапа', {
+      name, description, duration, location, target_audience, need_to_know,
+      will_happen, reason_to_come, date: arr[0], time: arr[1].slice(0, 5)
     })
   }
 }

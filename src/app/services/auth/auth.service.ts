@@ -59,7 +59,8 @@ export class AuthService {
       return {
         id: parsedToken.id,
         email: parsedToken.email,
-        roles: parsedToken.roles.map((role: any) => role.name)
+        password: parsedToken.password,
+        fio: parsedToken.fio
       }
     }
     return null
