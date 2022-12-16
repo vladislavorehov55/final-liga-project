@@ -3,8 +3,22 @@
   padding: 10px;
   font-weight: 400;
   background: #2C2C2C;
+  position: relative;
+  margin-bottom: 10px;
 }
-
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  background: black;
+  display: none;
+}
+.conducted {
+  display: block;
+}
 .topBlock {
   display: flex;
   justify-content: space-between;
@@ -81,6 +95,8 @@
     @extend %btn;
     background: #B85526;
     margin-left: 5px;
+    position: relative;
+    z-index: 100;
   }
   &Delete {
     @extend %btn;
@@ -90,6 +106,10 @@
 }
 .count {
   color: #B85526;
+}
+.wrap {
+  display: flex;
+  align-items: center;
 }
 
 

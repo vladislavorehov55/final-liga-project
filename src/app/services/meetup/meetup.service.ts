@@ -31,7 +31,21 @@ export class MeetupService {
     this.http.get<IMeetup[]>(`${this.environmentService.environment.apiUrl}/meetup`)
       .pipe(
         concatAll(),
-        map(meetup => ({...meetup, isOpened: false, status: MeetupStatusEnum.PLANNED})),
+        map(meetup => {
+          const meetupStart = Date.parse(meetup.time)
+          const meetupEnd = meetupStart + meetup.duration * 60000
+          const currentDate = Date.now()
+          if (currentDate > meetupEnd) {
+            meetup.status = MeetupStatusEnum.CONDUCTED
+          }
+          else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
+            meetup.status = MeetupStatusEnum.IN_PROGRESS
+          }
+          else if (currentDate < meetupStart) {
+            meetup.status = MeetupStatusEnum.PLANNED
+          }
+          return {...meetup, isOpened: false}
+        }),
         toArray()
       )
       .subscribe((data) => {

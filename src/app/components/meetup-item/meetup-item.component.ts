@@ -13,7 +13,14 @@ import {FormMeetupService} from "../../services/form-meetup/form-meetup.service"
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeetupItemComponent implements OnInit{
-  meetupStatus = ''
+
+
+  get isConducted() {
+    if (this.meetup.status === MeetupStatusEnum.CONDUCTED) {
+      return true
+    }
+    return false
+  }
 
   constructor(private _meetupService: MeetupService,
               private _authService: AuthService,
@@ -31,23 +38,14 @@ export class MeetupItemComponent implements OnInit{
   }
 
   get contentUnderDate() {
-    const meetupID = this.meetup.id
-    const meetupStart = Date.parse(this.meetupTime)
-    const meetupEnd = meetupStart + this.meetup.duration * 60000
-    const currentDate = Date.now()
-    if (currentDate > meetupEnd) {
-      this._meetupService.updateMeetupStatus(meetupID, MeetupStatusEnum.CONDUCTED)
-      return 'Проведен'
+    switch (this.meetup.status) {
+      case MeetupStatusEnum.PLANNED:
+        return this.meetup.location
+      case MeetupStatusEnum.IN_PROGRESS:
+        return 'Идет'
+      case MeetupStatusEnum.CONDUCTED:
+        return 'Проведен'
     }
-    else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
-      this._meetupService.updateMeetupStatus(meetupID, MeetupStatusEnum.IN_PROGRESS)
-      return 'Идет'
-    }
-    else if (currentDate < meetupStart) {
-      this._meetupService.updateMeetupStatus(meetupID, MeetupStatusEnum.PLANNED)
-      return this.meetup.location
-    }
-    return
   }
   setOpened(id: number) {
     this._meetupService.setMeetupOpened(id)
