@@ -82,6 +82,11 @@
     background: #B85526;
     margin-left: 5px;
   }
+  &Delete {
+    @extend %btn;
+    background: red;
+    margin-right: 5px;
+  }
 }
 .count {
   color: #B85526;

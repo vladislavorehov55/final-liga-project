@@ -90,5 +90,12 @@ export class MeetupService {
       .subscribe((data) => this._meetups = data)
   }
 
+  deleteMeetup(meetupID: number) {
+    this.http.delete<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`)
+      .subscribe(meetup => {
+        this._meetups = this.meetups.filter(item => item.id !== meetup.id)
+      })
+  }
+
 
 }

@@ -3,6 +3,7 @@ import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
 import {MeetupService} from "../../services/meetup/meetup.service";
 import {AuthService} from "../../services/auth/auth.service";
 import {IUser} from "../../models/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-meetup-item',
@@ -12,7 +13,8 @@ import {IUser} from "../../models/user";
 export class MeetupItemComponent implements OnInit{
   meetupStatus = ''
 
-  constructor(private _meetupService: MeetupService, private _authService: AuthService) {}
+  constructor(private _meetupService: MeetupService, private _authService: AuthService,
+              private _router: Router) {}
   ngOnInit() {
   }
   @Input()
@@ -56,13 +58,20 @@ export class MeetupItemComponent implements OnInit{
     }
     return true
   }
+  get url() {
+    return this._router.url
+  }
+  get user() {
+    return this._authService.user as IUser
+  }
   subscribe(idMeetup: number, idUser: number) {
     this._meetupService.subscribe(idMeetup, idUser)
   }
   unsubscribe(idMeetup: number, idUser: number) {
     this._meetupService.unsubscribe(idMeetup, idUser)
   }
-  get user() {
-    return this._authService.user as IUser
+  deleteMeetupHandler() {
+    this._meetupService.deleteMeetup(this.meetup.id)
   }
+
 }
