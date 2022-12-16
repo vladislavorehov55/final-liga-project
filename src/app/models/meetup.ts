@@ -1,4 +1,4 @@
-export interface IMeetup {
+export interface IMeetupResponse {
   id: number
   name: string
   description: string
@@ -24,8 +24,11 @@ export interface IMeetup {
       fio: string
     }
   ]
+}
+export interface IMeetup extends IMeetupResponse{
   isOpened: boolean
   status: MeetupStatusEnum
+  isOweCurrentUser: boolean
 }
 export enum MeetupStatusEnum {
   'PLANNED' = 'planned',

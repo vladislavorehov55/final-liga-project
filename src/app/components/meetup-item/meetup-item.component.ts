@@ -21,6 +21,9 @@ export class MeetupItemComponent implements OnInit{
     }
     return true
   }
+  get isOweCurrentUser() {
+    return this.meetup.isOweCurrentUser
+  }
 
   constructor(private _meetupService: MeetupService,
               private _authService: AuthService,

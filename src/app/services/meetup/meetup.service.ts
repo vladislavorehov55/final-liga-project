@@ -1,25 +1,21 @@
 import {Injectable} from '@angular/core';
-import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
+import {IMeetup, IMeetupResponse, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {concat, concatAll, filter, from, map, Observable, of, tap, toArray} from "rxjs";
+import {concatAll, map, toArray} from "rxjs";
 import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
-import {ajax} from "rxjs/ajax";
 
 @Injectable()
 export class MeetupService {
-  private _baseURL = `${this.environmentService.environment.apiUrl}`
+  private _baseURL: string = `${this.environmentService.environment.apiUrl}`
   private _meetups: Array<IMeetup> = []
   get meetups() {
-    console.log('getter meetups',)
+    console.log('all meetups', this._meetups)
     if (this._router.url === '/my-meetups') {
-      const {id} = this._authService.user as IUser
-      return this._meetups.filter(meetup => {
-        return meetup.owner.id === id
-      })
+      return this._meetups.filter(meetup => meetup.isOweCurrentUser)
     }
     return this._meetups
   }
@@ -28,40 +24,45 @@ export class MeetupService {
   }
 
   getDataMeetups() {
-    this.http.get<IMeetup[]>(`${this.environmentService.environment.apiUrl}/meetup`)
+    this.http.get<IMeetupResponse[]>(`${this.environmentService.environment.apiUrl}/meetup`)
       .pipe(
         concatAll(),
-        map(meetup => {
+        map((meetup:IMeetupResponse) => {
           const meetupStart = Date.parse(meetup.time)
           const meetupEnd = meetupStart + meetup.duration * 60000
           const currentDate = Date.now()
+          const newMeetup: IMeetup = {
+            ...meetup,
+            status: MeetupStatusEnum.PLANNED,isOpened: false,
+            isOweCurrentUser: this._authService.user?.id === meetup.createdBy
+          }
           if (currentDate > meetupEnd) {
-            meetup.status = MeetupStatusEnum.CONDUCTED
+            newMeetup.status = MeetupStatusEnum.CONDUCTED
           }
           else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
-            meetup.status = MeetupStatusEnum.IN_PROGRESS
+            newMeetup.status = MeetupStatusEnum.IN_PROGRESS
           }
           else if (currentDate < meetupStart) {
-            meetup.status = MeetupStatusEnum.PLANNED
+            newMeetup.status = MeetupStatusEnum.PLANNED
           }
-          return {...meetup, isOpened: false}
+          return newMeetup
         }),
         toArray()
       )
-      .subscribe((data) => {
+      .subscribe((data: IMeetup[]) => {
         this._meetups = data
       })
   }
 
-  updateMeetupStatus(meetupID: number, newStatus: MeetupStatusEnum) {
-    for (let i = 0; i < this.meetups.length; i++) {
-      if (this.meetups[i].id === meetupID) {
-        let meetup = this.meetups[i]
-        meetup = {...meetup, status: newStatus}
-        break
-      }
-    }
-  }
+  // updateMeetupStatus(meetupID: number, newStatus: MeetupStatusEnum) {
+  //   for (let i = 0; i < this.meetups.length; i++) {
+  //     if (this.meetups[i].id === meetupID) {
+  //       let meetup = this.meetups[i]
+  //       meetup = {...meetup, status: newStatus}
+  //       break
+  //     }
+  //   }
+  // }
 
   setMeetupOpened(id: number) {
     this._meetups = this.meetups.map(meetup => {
