@@ -12,5 +12,17 @@ export class MeetupsPageComponent {
 
   openFormHandler() {
     this._formMeetupService.openForm()
+    this._formMeetupService.setForm(true, 'Создания митапа', {
+      name: '',
+      description: '',
+      location: '',
+      duration: 90,
+      target_audience: '',
+      will_happen: '',
+      need_to_know: '',
+      reason_to_come: '',
+      date:  '',
+      time: ''
+    })
   }
 }
