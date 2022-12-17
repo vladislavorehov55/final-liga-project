@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IUser, IUserResponse} from "../../models/user";
+import {IUser, IUserGetResponse} from "../../models/user";
 import {UserService} from "../../services/user/user.service";
 import {FormService} from "../../services/form/form.service";
 
@@ -10,7 +10,7 @@ import {FormService} from "../../services/form/form.service";
 })
 export class UserItemComponent implements OnInit{
   @Input()
-  user!: IUserResponse
+  user!: IUserGetResponse
   constructor(private _formService: FormService, private _userService: UserService) {
   }
   ngOnInit() {

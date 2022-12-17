@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {EnvironmentService} from "../environment/environment.service";
-import {IUserResponse} from "../../models/user";
+import {IUserGetResponse} from "../../models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,8 @@ export class DataService {
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService,) { }
   getData() {
-    this._http.get<IUserResponse[]>(`${this._baseURL}`)
-      .subscribe((users: IUserResponse[]) => {
+    this._http.get<IUserGetResponse[]>(`${this._baseURL}`)
+      .subscribe((users: IUserGetResponse[]) => {
         console.log('users', users)
       })
   }

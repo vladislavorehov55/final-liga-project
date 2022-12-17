@@ -7,6 +7,12 @@ export interface IUser {
   fio: string
 }
 
-export interface IUserResponse extends IUser {
+export interface IUserGetResponse extends IUser {
   roles: IRole[]
+}
+export interface IUserDeleteResponse {
+  email: string
+  id: number
+  fio: number
+  password: string
 }
