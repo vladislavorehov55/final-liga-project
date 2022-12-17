@@ -12,6 +12,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./services/auth/auth.service";
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import {HeaderModule} from "./components/header/header.module";
+import {UsersPageModule} from "./components/pages/users-page/users-page.module";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {HeaderModule} from "./components/header/header.module";
     MeetupsPageModule,
     AuthPageModule,
     HttpClientModule,
-    HeaderModule
+    HeaderModule,
+    UsersPageModule
   ],
   providers: [
     MeetupService,
