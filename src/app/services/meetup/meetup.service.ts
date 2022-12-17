@@ -22,28 +22,30 @@ export class MeetupService {
 
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
-
+  private _getMeetupStatus(meetupTime: string, duration: number): MeetupStatusEnum {
+    const meetupStart = Date.parse(meetupTime)
+    const meetupEnd = meetupStart + duration * 60000
+    const currentDate = Date.now()
+    if (currentDate > meetupEnd) {
+      return MeetupStatusEnum.CONDUCTED
+    }
+    else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
+      return MeetupStatusEnum.IN_PROGRESS
+    }
+    else {
+      return MeetupStatusEnum.PLANNED
+    }
+  }
   getDataMeetups() {
-    this.http.get<IMeetupResponse[]>(`${this.environmentService.environment.apiUrl}/meetup`)
+    this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
       .pipe(
         concatAll(),
         map((meetup:IMeetupResponse) => {
-          const meetupStart = Date.parse(meetup.time)
-          const meetupEnd = meetupStart + meetup.duration * 60000
-          const currentDate = Date.now()
           const newMeetup: IMeetup = {
             ...meetup,
-            status: MeetupStatusEnum.PLANNED,isOpened: false,
+            status: this._getMeetupStatus(meetup.time, meetup.duration),
+            isOpened: false,
             isOweCurrentUser: this._authService.user?.id === meetup.createdBy
-          }
-          if (currentDate > meetupEnd) {
-            newMeetup.status = MeetupStatusEnum.CONDUCTED
-          }
-          else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
-            newMeetup.status = MeetupStatusEnum.IN_PROGRESS
-          }
-          else if (currentDate < meetupStart) {
-            newMeetup.status = MeetupStatusEnum.PLANNED
           }
           return newMeetup
         }),
@@ -53,16 +55,6 @@ export class MeetupService {
         this._meetups = data
       })
   }
-
-  // updateMeetupStatus(meetupID: number, newStatus: MeetupStatusEnum) {
-  //   for (let i = 0; i < this.meetups.length; i++) {
-  //     if (this.meetups[i].id === meetupID) {
-  //       let meetup = this.meetups[i]
-  //       meetup = {...meetup, status: newStatus}
-  //       break
-  //     }
-  //   }
-  // }
 
   setMeetupOpened(id: number) {
     this._meetups = this.meetups.map(meetup => {
@@ -74,12 +66,18 @@ export class MeetupService {
   }
 
   subscribe(idMeetup: number, idUser: number) {
-    this.http.put<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup`, {idMeetup, idUser})
+    this.http.put<IMeetupResponse>(`${this._baseURL}/meetup`, {idMeetup, idUser})
       .pipe(
         map((meetup) => {
+          const user: IUser = this._authService.user as IUser
           for (let i = 0; i < this.meetups.length; i++) {
             if (this.meetups[i].id === meetup.id) {
-              this.meetups[i] = meetup
+              this.meetups[i] = {
+                ...meetup,
+                isOpened: false,
+                status: this._getMeetupStatus(meetup.time, meetup.duration),
+                isOweCurrentUser: user.id === meetup.createdBy
+              }
               break
             }
           }
@@ -90,27 +88,33 @@ export class MeetupService {
   }
 
   unsubscribe(idMeetup: number, idUser: number) {
-    this.http.delete<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup`, {
+    this.http.delete<IMeetupResponse>(`${this._baseURL}/meetup`, {
       body: {idMeetup, idUser}
     })
       .pipe(
         map((meetup) => {
+          const user: IUser = this._authService.user as IUser
           for (let i = 0; i < this.meetups.length; i++) {
             if (this.meetups[i].id === meetup.id) {
-              this.meetups[i] = meetup
+              this.meetups[i] = {
+                ...meetup,
+                isOpened: false,
+                status: this._getMeetupStatus(meetup.time, meetup.duration),
+                isOweCurrentUser: user.id === meetup.createdBy
+              }
               break
             }
           }
           return this.meetups
         })
       )
-      .subscribe((data) => this._meetups = data)
+      .subscribe((data: IMeetup[]) => this._meetups = data)
   }
 
   deleteMeetup(meetupID: number) {
-    this.http.delete<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`)
-      .subscribe(meetup => {
-        this._meetups = this.meetups.filter(item => item.id !== meetup.id)
+    this.http.delete<IMeetupResponse>(`${this._baseURL}/meetup/${meetupID}`)
+      .subscribe(() => {
+        this.getDataMeetups()
       })
   }
 
@@ -137,7 +141,7 @@ export class MeetupService {
 
   editMeetup(meetupID: number, form: FormGroup) {
     const editedMeetUp = this._getMeetUpToRequest(form)
-    this.http.put<IMeetup>(`${this.environmentService.environment.apiUrl}/meetup/${meetupID}`, editedMeetUp)
+    this.http.put<IMeetupResponse>(`${this._baseURL}/meetup/${meetupID}`, editedMeetUp)
       .subscribe(meetup => {
         this.getDataMeetups()
       })
@@ -162,7 +166,8 @@ export class MeetupService {
         meetup.location.includes(value) || meetup.duration === +value ||
         meetup.target_audience.includes(value) || meetup.will_happen.includes(value) ||
         meetup.need_to_know.includes(value) || meetup.reason_to_come.includes(value) ||
-        new Date(meetup.time).toLocaleString().includes(value)
+        new Date(this.meetups[0].time).toLocaleDateString('ru',
+          {day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit'}).includes(value)
     })
   }
 
