@@ -54,8 +54,7 @@ export class FormUserComponent implements OnInit{
   }
 
   addUserHandler() {
-    this._userService.addUser({
-      id: 0,
+    this._userService.addUser(this.userRole,{
       fio: this.form.value.fio,
       password: this.form.value.password,
       email: this.form.value.email

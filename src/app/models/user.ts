@@ -1,13 +1,13 @@
 import {IRole} from "./role";
 
 export interface IUser {
-  id: number
   email: string
   password: string
   fio: string
 }
 
 export interface IUserGetResponse extends IUser {
+  id: number
   roles: IRole[]
 }
 export interface IUserDeleteResponse {

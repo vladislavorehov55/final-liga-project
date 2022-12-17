@@ -27,14 +27,23 @@ export class UserService {
         console.log('users', users)
       })
   }
-  addUser(newUser: IUser) {
+  addUser(userRole: string, newUser: IUser) {
     this._http.post<{token: string}>(`${this._baseURL}/auth/registration`, newUser)
       .subscribe(({token}) => {
         const parsedToken: IParsedToken = this._authService.parseJwt(token)
-        console.log('newUserReq', parsedToken)
-        // this._http.post(`${this._baseURL}/user/role`, {
-        //
-        // })
+        if (userRole.toUpperCase() !== 'USER') {
+          const body = {
+            userId: parsedToken.id,
+            names: [parsedToken.roles[0].name, userRole]
+          }
+          this._http.post(`${this._baseURL}/user/role`, body)
+            .subscribe(data => {
+              this.getDataUsers()
+            })
+        }
+        else {
+          this.getDataUsers()
+        }
       })
   }
   deleteUser(id: number) {
