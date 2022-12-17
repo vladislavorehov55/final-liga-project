@@ -13,12 +13,12 @@
   z-index: 2;
 }
 .form {
-  min-height: 200px;
   padding: 10px;
   flex-basis: 90%;
   background: $bg-light;
   overflow-y: auto;
   position: relative;
+  height: 400px;
 }
 
 .close {
@@ -34,4 +34,39 @@
 .btnWrap {
   display: flex;
   justify-content: center;
+}
+.roleBlock {
+  display: flex;
+  align-items: center;
+}
+.roleWrap {
+  position: relative;
+  margin-left: 10px;
+  border: 3px solid #4C3F78;
+  border-radius: 5px;
+  padding: 5px 10px;
+  min-width: 150px;
+}
+.roleWrap:hover .selectUserWrap {
+  display: block;
+}
+.selectUserWrap {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  list-style: none;
+}
+.selectUserItem {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #4C3F78;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.selectUserItem:hover {
+  opacity: 0.5;
 }

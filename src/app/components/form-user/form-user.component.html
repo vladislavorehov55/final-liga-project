@@ -21,6 +21,17 @@
       </div>
     </div>
 
+    <div class="roleBlock">
+      <label>Роль</label>
+      <div class="roleWrap">
+        <span>{{chosenUserRole}}</span>
+        <ul class="selectUserWrap" (click)="changeUserRoleHandler($event)">
+          <li class="selectUserItem">пользователь</li>
+          <li class="selectUserItem">админ</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="btnWrap">
       <button *ngIf="formType.includes('add'); else elseBtn">Создать</button>
       <ng-template #elseBtn>

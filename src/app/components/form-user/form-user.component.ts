@@ -9,7 +9,6 @@ import {FormService} from "../../services/form/form.service";
 export class FormUserComponent {
   constructor(private _formService: FormService) {
   }
-
   get form() {
     return this._formService.form
   }
@@ -24,5 +23,12 @@ export class FormUserComponent {
   }
   closeFormHandler() {
     this._formService.isShow = false
+  }
+  userRole = 'пользователь'
+  get chosenUserRole() {
+    return this.userRole
+  }
+  changeUserRoleHandler(e: any) {
+    this.userRole = e.target.textContent
   }
 }
