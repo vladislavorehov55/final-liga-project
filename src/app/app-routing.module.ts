@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {MeetupsPageComponent} from "./components/pages/meetups-page/meetups-page.component";
 import {AuthPageComponent} from "./components/pages/auth-page/auth-page.component";
 import {AuthGuard} from "./guards/auth.guard";
+import {UsersPageComponent} from "./components/pages/users-page/users-page.component";
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
     path: 'my-meetups',
     component: MeetupsPageComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'users',
+    component: UsersPageComponent
   }
 ];
 
