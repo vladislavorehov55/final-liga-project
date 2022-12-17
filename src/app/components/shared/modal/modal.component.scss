@@ -1,0 +1,14 @@
+@import "../../../scss-var/variables";
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #E9E9E9;
+  background: $bg-dark;
+  z-index: 2;
+}

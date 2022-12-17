@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersPageComponent } from './users-page.component';
 import {UsersListModule} from "../../users-list/users-list.module";
+import {ModalModule} from "../../shared/modal/modal.module";
 
 
 
@@ -11,7 +12,8 @@ import {UsersListModule} from "../../users-list/users-list.module";
   ],
   imports: [
     CommonModule,
-    UsersListModule
+    UsersListModule,
+    ModalModule
   ],
   exports: [UsersPageComponent]
 })
