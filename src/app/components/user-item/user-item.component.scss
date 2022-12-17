@@ -1,0 +1,14 @@
+.itemWrap {
+  color: #fff;
+  height: 40px;
+  display: flex;
+
+}
+.cell {
+  border: 1px solid #fff;
+  height: 100%;
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

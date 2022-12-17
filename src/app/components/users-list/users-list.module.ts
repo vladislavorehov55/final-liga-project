@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersListComponent } from './users-list.component';
+import {UserItemModule} from "../user-item/user-item.module";
 
 
 
@@ -9,7 +10,8 @@ import { UsersListComponent } from './users-list.component';
     UsersListComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    UserItemModule
   ],
   exports: [UsersListComponent]
 })

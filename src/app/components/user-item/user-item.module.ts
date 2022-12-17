@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserItemComponent } from './user-item.component';
+import {SvgGeneratorModule} from "../shared/svg-generator/svg-generator.module";
 
 
 
@@ -8,8 +9,12 @@ import { UserItemComponent } from './user-item.component';
   declarations: [
     UserItemComponent
   ],
+  exports: [
+    UserItemComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    SvgGeneratorModule
   ]
 })
 export class UserItemModule { }
