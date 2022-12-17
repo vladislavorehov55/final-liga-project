@@ -13,7 +13,7 @@ export class AuthPageComponent implements OnInit {
     password: FormControl
   }>
 
-  constructor(private authService: AuthService) {
+  constructor(private _authService: AuthService) {
   }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class AuthPageComponent implements OnInit {
 
   submitHandler(event: SubmitEvent) {
     event.preventDefault()
-    this.authService.login(this.form.get('login')?.value, this.form.get('password')?.value)
+    this._authService.login(this.form.get('login')?.value, this.form.get('password')?.value)
   }
 
 }

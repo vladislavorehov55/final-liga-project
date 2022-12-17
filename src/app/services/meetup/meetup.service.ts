@@ -7,6 +7,7 @@ import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
+import {IParsedToken} from "../../models/parsedTokem";
 
 @Injectable()
 export class MeetupService {
@@ -69,7 +70,7 @@ export class MeetupService {
     this.http.put<IMeetupResponse>(`${this._baseURL}/meetup`, {idMeetup, idUser})
       .pipe(
         map((meetup) => {
-          const user: IUser = this._authService.user as IUser
+          const user: IParsedToken = this._authService.user as IParsedToken
           for (let i = 0; i < this.meetups.length; i++) {
             if (this.meetups[i].id === meetup.id) {
               this.meetups[i] = {
@@ -93,7 +94,7 @@ export class MeetupService {
     })
       .pipe(
         map((meetup) => {
-          const user: IUser = this._authService.user as IUser
+          const user: IParsedToken = this._authService.user as IParsedToken
           for (let i = 0; i < this.meetups.length; i++) {
             if (this.meetups[i].id === meetup.id) {
               this.meetups[i] = {

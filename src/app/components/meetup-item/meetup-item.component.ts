@@ -5,6 +5,7 @@ import {AuthService} from "../../services/auth/auth.service";
 import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
 import {FormMeetupService} from "../../services/form-meetup/form-meetup.service";
+import {IParsedToken} from "../../models/parsedTokem";
 
 @Component({
   selector: 'app-meetup-item',
@@ -67,7 +68,7 @@ export class MeetupItemComponent implements OnInit{
     return this._router.url
   }
   get user() {
-    return this._authService.user as IUser
+    return this._authService.user as IParsedToken
   }
   subscribe(idMeetup: number, idUser: number) {
     this._meetupService.subscribe(idMeetup, idUser)

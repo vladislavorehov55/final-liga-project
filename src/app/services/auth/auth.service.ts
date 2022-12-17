@@ -4,11 +4,12 @@ import {EnvironmentService} from "../environment/environment.service";
 import {BehaviorSubject, map} from "rxjs";
 import {Router} from "@angular/router";
 import {IUser} from "../../models/user";
+import {IParsedToken} from "../../models/parsedTokem";
 
 @Injectable()
 export class AuthService {
 
-  userSubject = new BehaviorSubject<IUser | null>(this.user)
+  userSubject = new BehaviorSubject<IParsedToken | null>(this.user)
 
   baseUrl: string = `${this.environmentService.environment.apiUrl}/auth`
 
@@ -27,7 +28,7 @@ export class AuthService {
         })
       ).subscribe((token) => {
         if (token) {
-          const parsedToken = this.parseJwt(token)
+          const parsedToken: IParsedToken = this.parseJwt(token)
           this.userSubject.next(parsedToken)
           this.router.navigate([''])
         }
@@ -52,16 +53,11 @@ export class AuthService {
     );
     return JSON.parse(jsonPayload);
   }
-  get user(): IUser | null {
+  get user(): IParsedToken | null {
     const token = this.token
     if (token) {
-      const parsedToken = this.parseJwt(token)
-      return {
-        id: parsedToken.id,
-        email: parsedToken.email,
-        password: parsedToken.password,
-        fio: parsedToken.fio
-      }
+      const parsedToken: IParsedToken = this.parseJwt(token)
+      return parsedToken
     }
     return null
   }

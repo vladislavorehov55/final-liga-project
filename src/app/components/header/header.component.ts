@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {IUser} from "../../models/user";
+import {IParsedToken} from "../../models/parsedTokem";
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import {IUser} from "../../models/user";
 })
 export class HeaderComponent implements OnInit, OnDestroy{
 
-  user: IUser | null = null
+  user: IParsedToken | null = null
   constructor(private _authService: AuthService, private _cdr: ChangeDetectorRef) {
   }
 
