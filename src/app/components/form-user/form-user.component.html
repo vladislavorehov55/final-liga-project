@@ -1,0 +1,32 @@
+<div class="modal" *ngIf="isSown">
+  <form [formGroup]="form" class="form">
+    <div class="close" (click)="closeFormHandler()">&times;</div>
+    <h2 class="title">{{title}}</h2>
+    <div class="block">
+      <label>ФИО</label>
+      <div class="inputWrap">
+        <input formControlName="fio" class="input">
+      </div>
+    </div>
+    <div class="block">
+      <label>Почта</label>
+      <div class="inputWrap">
+        <input formControlName="email" class="input">
+      </div>
+    </div>
+    <div class="block">
+      <label>Пароль</label>
+      <div class="inputWrap">
+        <input type="text" formControlName="password" class="input">
+      </div>
+    </div>
+
+    <div class="btnWrap">
+      <button *ngIf="formType.includes('add'); else elseBtn">Создать</button>
+      <ng-template #elseBtn>
+        <button>Сохранить</button>
+      </ng-template>
+    </div>
+  </form>
+
+</div>
