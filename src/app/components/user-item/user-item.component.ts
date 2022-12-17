@@ -11,7 +11,7 @@ import {FormService} from "../../services/form/form.service";
 export class UserItemComponent implements OnInit{
   @Input()
   user!: IUserResponse
-  constructor(private _formService: FormService) {
+  constructor(private _formService: FormService, private _userService: UserService) {
   }
   ngOnInit() {
   }
@@ -23,5 +23,8 @@ export class UserItemComponent implements OnInit{
       email: this.user.email,
       password: this.user.password
     })
+  }
+  deleteUserHandler() {
+    this._userService.deleteUser(this.user.id)
   }
 }

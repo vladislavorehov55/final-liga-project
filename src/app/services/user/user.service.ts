@@ -33,4 +33,12 @@ export class UserService {
         // })
       })
   }
+  deleteUser(id: number) {
+    this._http.delete(`${this._baseURL}/user/${id}`)
+      .subscribe((data) => {
+        console.log('delete user', data)
+        this.getDataUsers()
+      })
+  }
+
 }
