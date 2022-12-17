@@ -7,7 +7,7 @@ import {IUser, IUserResponse} from "../../models/user";
   providedIn: 'root'
 })
 export class UserService {
-  private _baseURL: string = `${this._environmentService.environment.apiUrl}/user`
+  private _baseURL: string = `${this._environmentService.environment.apiUrl}`
   private _users!: IUserResponse[]
 
 
@@ -18,10 +18,19 @@ export class UserService {
   }
 
   getDataUsers() {
-    this._http.get<IUserResponse[]>(`${this._baseURL}`)
+    this._http.get<IUserResponse[]>(`${this._baseURL}/user`)
       .subscribe((users: IUserResponse[]) => {
         this._users = users
         console.log('users', users)
+      })
+  }
+  addUser(newUser: IUser) {
+    this._http.post<{token: string}>(`${this._baseURL}/auth/registration`, newUser)
+      .subscribe(({token}) => {
+        console.log('newUserReq', token)
+        // this._http.post(`${this._baseURL}/user/role`, {
+        //
+        // })
       })
   }
 }

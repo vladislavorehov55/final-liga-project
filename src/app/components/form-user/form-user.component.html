@@ -37,9 +37,13 @@
     </div>
 
     <div class="btnWrap">
-      <button *ngIf="formType.includes('add'); else elseBtn">Создать</button>
+      <button type="submit" *ngIf="formType.includes('add'); else elseBtn"
+              (click)="addUserHandler()"
+      >
+        Создать
+      </button>
       <ng-template #elseBtn>
-        <button>Сохранить</button>
+        <button type="submit">Сохранить</button>
       </ng-template>
     </div>
   </form>

@@ -3,6 +3,7 @@ import {FormService} from "../../services/form/form.service";
 import {RoleService} from "../../services/role/role.service";
 import {IRole} from "../../models/role";
 import {IUser} from "../../models/user";
+import {UserService} from "../../services/user/user.service";
 
 @Component({
   selector: 'app-form-user',
@@ -10,7 +11,8 @@ import {IUser} from "../../models/user";
   styleUrls: ['./form-user.component.scss']
 })
 export class FormUserComponent implements OnInit{
-  constructor(private _formService: FormService, private _roleService: RoleService) {
+  constructor(private _formService: FormService, private _roleService: RoleService,
+              private _userService: UserService) {
   }
 
   ngOnInit() {
@@ -49,5 +51,14 @@ export class FormUserComponent implements OnInit{
 
   changeUserRoleHandler(role: IRole) {
     this.userRole = role.name
+  }
+
+  addUserHandler() {
+    this._userService.addUser({
+      id: 0,
+      fio: this.form.value.fio,
+      password: this.form.value.password,
+      email: this.form.value.email
+    })
   }
 }
