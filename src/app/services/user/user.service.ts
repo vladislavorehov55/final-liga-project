@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {EnvironmentService} from "../environment/environment.service";
 import {IUser, IUserResponse} from "../../models/user";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class UserService {
   get users() {
     return this._users
   }
-  constructor(private _http: HttpClient, private _environmentService: EnvironmentService,) {
+  constructor(private _http: HttpClient, private _environmentService: EnvironmentService,
+              private _authService: AuthService) {
   }
 
   getDataUsers() {
@@ -27,7 +29,8 @@ export class UserService {
   addUser(newUser: IUser) {
     this._http.post<{token: string}>(`${this._baseURL}/auth/registration`, newUser)
       .subscribe(({token}) => {
-        console.log('newUserReq', token)
+        const parsedToken = this._authService.parseJwt(token)
+        console.log('newUserReq', parsedToken)
         // this._http.post(`${this._baseURL}/user/role`, {
         //
         // })
