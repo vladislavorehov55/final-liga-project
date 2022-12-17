@@ -1,16 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {UserService} from "../../../services/user/user.service";
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-users-page',
   templateUrl: './users-page.component.html',
   styleUrls: ['./users-page.component.scss']
 })
-export class UsersPageComponent implements OnInit {
-  constructor(private _userService: UserService) {
-  }
+export class UsersPageComponent {
 
-  ngOnInit() {
-    this._userService.getDataUsers()
-  }
 }

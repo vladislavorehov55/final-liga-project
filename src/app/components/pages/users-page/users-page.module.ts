@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersPageComponent } from './users-page.component';
-import {ListModule} from "../../shared/list/list.module";
+import {UsersListModule} from "../../users-list/users-list.module";
 
 
 
@@ -11,7 +11,7 @@ import {ListModule} from "../../shared/list/list.module";
   ],
   imports: [
     CommonModule,
-    ListModule
+    UsersListModule
   ],
   exports: [UsersPageComponent]
 })
