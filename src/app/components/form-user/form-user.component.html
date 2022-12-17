@@ -25,9 +25,13 @@
       <label>Роль</label>
       <div class="roleWrap">
         <span>{{chosenUserRole}}</span>
-        <ul class="selectUserWrap" (click)="changeUserRoleHandler($event)">
-          <li class="selectUserItem">пользователь</li>
-          <li class="selectUserItem">админ</li>
+        <ul class="selectUserWrap">
+          <li class="selectUserItem"
+              *ngFor="let role of roles"
+              (click)="changeUserRoleHandler(role)"
+          >
+            {{role.name | lowercase}}
+          </li>
         </ul>
       </div>
     </div>
