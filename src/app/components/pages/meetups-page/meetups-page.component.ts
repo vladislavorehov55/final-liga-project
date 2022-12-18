@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {FormMeetupService} from "../../../services/form-meetup/form-meetup.service";
+import {FormService} from "../../../services/form/form.service";
 
 @Component({
   selector: 'app-meetups-page',
@@ -8,12 +8,14 @@ import {FormMeetupService} from "../../../services/form-meetup/form-meetup.servi
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeetupsPageComponent {
-  constructor(private _formMeetupService: FormMeetupService) {
+  constructor(private _formService: FormService) {
   }
 
   openFormHandler() {
-    this._formMeetupService.openForm()
-    this._formMeetupService.setForm(true, 'Создания митапа', {
+
+    this._formService.isShow = true
+    console.log('ma')
+    this._formService.setForm('MEETUP', 'ADD',  'Создания митапа', '', {
       name: '',
       description: '',
       location: '',

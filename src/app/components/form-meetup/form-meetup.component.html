@@ -42,7 +42,7 @@
     <label class="label reason">Зачем приходить</label>
     <textarea class="textareaReason" formControlName="reason_to_come"></textarea>
     <div class="btnWrap">
-      <button *ngIf="isCreating; else elseBlock"
+      <button *ngIf="formMethodType==='ADD'; else elseBlock"
               class="btn"
               type="submit"
               (click)="addMeetupHandler()"

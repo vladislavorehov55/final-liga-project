@@ -7,11 +7,13 @@ import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
 import {IParsedToken} from "../../models/parsedTokem";
+import {IMeetupAddFieldsReq} from "../../models/meetup-add-fields-req";
 
 @Injectable()
 export class MeetupService {
   private _baseURL: string = `${this.environmentService.environment.apiUrl}`
   private _meetups: Array<IMeetup> = []
+  editedMeetupID: number | null = null
   get meetups() {
     console.log('all meetups', this._meetups)
     if (this._router.url === '/my-meetups') {
@@ -123,6 +125,11 @@ export class MeetupService {
       })
   }
 
+  addMeetup(meetup: IMeetupAddFieldsReq) {
+    this.http.post<IMeetup>(`${this._baseURL}/meetup`, meetup)
+      .subscribe(data => this.getDataMeetups())
+  }
+
   deleteMeetup(meetupID: number) {
     this.http.delete<IMeetupResponse>(`${this._baseURL}/meetup/${meetupID}`)
       .subscribe(() => {
@@ -151,9 +158,9 @@ export class MeetupService {
     }
   }
 
-  editMeetup(meetupID: number, form: FormGroup) {
+  editMeetup(form: FormGroup) {
     const editedMeetUp = this._getMeetUpToRequest(form)
-    this.http.put<IMeetupResponse>(`${this._baseURL}/meetup/${meetupID}`, editedMeetUp)
+    this.http.put<IMeetupResponse>(`${this._baseURL}/meetup/${this.editedMeetupID}`, editedMeetUp)
       .subscribe(meetup => {
         this.getDataMeetups()
       })

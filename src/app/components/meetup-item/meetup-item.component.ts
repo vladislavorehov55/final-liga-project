@@ -2,10 +2,9 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {IMeetup, MeetupStatusEnum} from "../../models/meetup";
 import {MeetupService} from "../../services/meetup/meetup.service";
 import {AuthService} from "../../services/auth/auth.service";
-import {IUser} from "../../models/user";
 import {Router} from "@angular/router";
-import {FormMeetupService} from "../../services/form-meetup/form-meetup.service";
 import {IParsedToken} from "../../models/parsedTokem";
+import {FormService} from "../../services/form/form.service";
 
 @Component({
   selector: 'app-meetup-item',
@@ -29,7 +28,7 @@ export class MeetupItemComponent implements OnInit{
   constructor(private _meetupService: MeetupService,
               private _authService: AuthService,
               private _router: Router,
-              private _formMeetupService: FormMeetupService) {}
+              private _formService: FormService) {}
   ngOnInit() {
   }
   @Input()
@@ -81,12 +80,12 @@ export class MeetupItemComponent implements OnInit{
     this._meetupService.deleteMeetup(this.meetup.id)
   }
   editMeetupHandler() {
-    this._formMeetupService.editedMeetupID = this.meetup.id
-    this._formMeetupService.isShow = true
+    this._meetupService.editedMeetupID = this.meetup.id
+    this._formService.isShow = true
     const {name, description, duration, location, target_audience, need_to_know,
       will_happen, reason_to_come, time } = this.meetup
     const arr = new Date(time).toLocaleString().split(', ')
-    this._formMeetupService.setForm(false, 'Редактирвоание митапа', {
+    this._formService.setForm('MEETUP', 'EDIT','Редактирвоание митапа',  '',{
       name, description, duration, location, target_audience, need_to_know,
       will_happen, reason_to_come, date: arr[0], time: arr[1].slice(0, 5)
     })

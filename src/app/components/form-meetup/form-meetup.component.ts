@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
-import {FormMeetupService} from "../../services/form-meetup/form-meetup.service";
 import {MeetupService} from "../../services/meetup/meetup.service";
+import {FormService} from "../../services/form/form.service";
 
 
 export interface IFormFields {
@@ -23,21 +23,23 @@ export interface IFormFields {
 })
 export class FormMeetupComponent{
 
-  constructor(private _formMeetupService: FormMeetupService, private _meetupService: MeetupService) {
+  constructor(private _formService: FormService,
+              private _meetupService: MeetupService) {
   }
   get form() {
-    return this._formMeetupService.form
+    return this._formService.form
   }
   get title() {
-    return this._formMeetupService.title
+    return this._formService.title
   }
 
-  get isCreating() {
-    return this._formMeetupService.isCreating
-  }
+
 
   get isShow() {
-    return this._formMeetupService.isShow
+    return this._formService.isShow
+  }
+  get formMethodType() {
+    return this._formService.formMethodType
   }
 
   ngOnInit() {
@@ -60,15 +62,15 @@ export class FormMeetupComponent{
     timeComponents[1] = timeComponents[1] - 1
     newMeetup['time'] = new Date(...timeComponents).toISOString()
     console.log('newMeetup', newMeetup)
-    this._formMeetupService.addMeetup(newMeetup)
+    this._meetupService.addMeetup(newMeetup)
   }
 
   editMeetupHandler() {
-    this._meetupService.editMeetup(this._formMeetupService.editedMeetupID, this.form)
+    this._meetupService.editMeetup(this.form)
   }
 
   closeFormHandler() {
-    this._formMeetupService.closeForm()
+    this._formService.isShow = false
   }
 
 }

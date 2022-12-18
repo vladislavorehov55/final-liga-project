@@ -1,4 +1,4 @@
-<div class="modal" *ngIf="isSown">
+<div class="modal" *ngIf="isShow">
   {{changeDetect}}
   <form [formGroup]="form" class="form">
     <div class="close" (click)="closeFormHandler()">&times;</div>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="btnWrap">
-      <button type="submit" *ngIf="formType.includes('add'); else elseBtn"
+      <button type="submit" *ngIf="formMethodType==='ADD'; else elseBtn"
               (click)="addUserHandler()"
       >
         Создать

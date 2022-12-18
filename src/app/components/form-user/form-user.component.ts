@@ -36,12 +36,12 @@ export class FormUserComponent implements OnInit, AfterContentChecked{
     return this._formService.title
   }
 
-  get isSown() {
+  get isShow() {
     return this._formService.isShow
   }
 
-  get formType() {
-    return this._formService.formType
+  get formMethodType() {
+    return this._formService.formMethodType
   }
 
   closeFormHandler() {
