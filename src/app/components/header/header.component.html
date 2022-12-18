@@ -29,7 +29,7 @@
           Мои митапы
         </a>
       </li>
-      <li class="navItem">
+      <li class="navItem" *ngIf="canGetUsersLink()">
         <a class="navLink"
            routerLink="/users"
            routerLinkActive="activeLink"

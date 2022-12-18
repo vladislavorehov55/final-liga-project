@@ -4,6 +4,7 @@ import {MeetupsPageComponent} from "./components/pages/meetups-page/meetups-page
 import {AuthPageComponent} from "./components/pages/auth-page/auth-page.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {UsersPageComponent} from "./components/pages/users-page/users-page.component";
+import {UsersGuard} from "./guards/users/users.guard";
 
 const routes: Routes = [
   {
@@ -23,7 +24,7 @@ const routes: Routes = [
   {
     path: 'users',
     component: UsersPageComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, UsersGuard]
   }
 ];
 

@@ -28,6 +28,17 @@ export class HeaderComponent implements OnInit, OnDestroy{
     this._authService.logout()
   }
 
+  canGetUsersLink() {
+    if (this.user) {
+      for (let role of this.user.roles) {
+        if (role.name === 'ADMIN') {
+          return true
+        }
+      }
+    }
+    return  false
+  }
+
   ngOnDestroy() {
     this._authService.userSubject.unsubscribe()
   }
