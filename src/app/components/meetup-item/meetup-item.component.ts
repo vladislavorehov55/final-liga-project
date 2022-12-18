@@ -35,6 +35,7 @@ export class MeetupItemComponent implements OnInit{
   @Input()
   meetup!: IMeetup
   get subscribersCount() {
+    console.log('Render meetup')
     return this.meetup.users.length
   }
   get meetupTime() {

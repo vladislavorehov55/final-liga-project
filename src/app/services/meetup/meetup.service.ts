@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {IMeetup, IMeetupResponse, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {concatAll, map, toArray} from "rxjs";
-import {IUser} from "../../models/user";
+import {BehaviorSubject, concatAll, map, toArray} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
@@ -20,6 +19,7 @@ export class MeetupService {
     }
     return this._meetups
   }
+  meetupsSubject = new BehaviorSubject<IMeetup[]>([])
 
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
@@ -37,6 +37,7 @@ export class MeetupService {
       return MeetupStatusEnum.PLANNED
     }
   }
+
   getDataMeetups() {
     this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
       .pipe(
@@ -54,16 +55,18 @@ export class MeetupService {
       )
       .subscribe((data: IMeetup[]) => {
         this._meetups = data
+        this.meetupsSubject.next(data)
       })
   }
 
   setMeetupOpened(id: number) {
-    this._meetups = this.meetups.map(meetup => {
+    const meetups = this.meetups.map(meetup => {
       if (meetup.id === id) {
         meetup.isOpened = !meetup.isOpened
       }
       return meetup
     })
+    this.meetupsSubject.next(meetups)
   }
 
   subscribe(idMeetup: number, idUser: number) {
@@ -71,9 +74,10 @@ export class MeetupService {
       .pipe(
         map((meetup) => {
           const user: IParsedToken = this._authService.user as IParsedToken
-          for (let i = 0; i < this.meetups.length; i++) {
-            if (this.meetups[i].id === meetup.id) {
-              this.meetups[i] = {
+          const currentMeetups = this.meetups
+          for (let i = 0; i < currentMeetups.length; i++) {
+            if (currentMeetups[i].id === meetup.id) {
+              currentMeetups[i] = {
                 ...meetup,
                 isOpened: false,
                 status: this._getMeetupStatus(meetup.time, meetup.duration),
@@ -82,10 +86,13 @@ export class MeetupService {
               break
             }
           }
-          return this.meetups
+          return currentMeetups
         })
       )
-      .subscribe((data) => this._meetups = data)
+      .subscribe((data) => {
+        this._meetups = data
+        this.meetupsSubject.next(data)
+      })
   }
 
   unsubscribe(idMeetup: number, idUser: number) {
@@ -95,9 +102,10 @@ export class MeetupService {
       .pipe(
         map((meetup) => {
           const user: IParsedToken = this._authService.user as IParsedToken
-          for (let i = 0; i < this.meetups.length; i++) {
-            if (this.meetups[i].id === meetup.id) {
-              this.meetups[i] = {
+          const currentMeetups = this.meetups
+          for (let i = 0; i < currentMeetups.length; i++) {
+            if (currentMeetups[i].id === meetup.id) {
+              currentMeetups[i] = {
                 ...meetup,
                 isOpened: false,
                 status: this._getMeetupStatus(meetup.time, meetup.duration),
@@ -106,10 +114,13 @@ export class MeetupService {
               break
             }
           }
-          return this.meetups
+          return currentMeetups
         })
       )
-      .subscribe((data: IMeetup[]) => this._meetups = data)
+      .subscribe((data: IMeetup[]) => {
+        this._meetups = data
+        this.meetupsSubject.next(data)
+      })
   }
 
   deleteMeetup(meetupID: number) {

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormMeetupService} from "../../../services/form-meetup/form-meetup.service";
 
 @Component({
   selector: 'app-meetups-page',
   templateUrl: './meetups-page.component.html',
-  styleUrls: ['./meetups-page.component.scss']
+  styleUrls: ['./meetups-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeetupsPageComponent {
   constructor(private _formMeetupService: FormMeetupService) {
