@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
-import {IUser} from "../../models/user";
 import {IParsedToken} from "../../models/parsedTokem";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,8 @@ import {IParsedToken} from "../../models/parsedTokem";
 export class HeaderComponent implements OnInit, OnDestroy{
 
   user: IParsedToken | null = null
-  constructor(private _authService: AuthService, private _cdr: ChangeDetectorRef) {
+  constructor(private _authService: AuthService, private _cdr: ChangeDetectorRef,
+              private _router: Router) {
   }
 
   ngOnInit() {
@@ -37,6 +38,13 @@ export class HeaderComponent implements OnInit, OnDestroy{
       }
     }
     return  false
+  }
+
+  userIconClickHandler() {
+    if (this._router.url === '/auth') {
+      return
+    }
+    this._router.navigate(['auth'])
   }
 
   ngOnDestroy() {

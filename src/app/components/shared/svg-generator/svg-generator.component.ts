@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-svg-generator',
@@ -8,6 +9,11 @@ import {Component, Input, OnInit} from '@angular/core';
 export class SvgGeneratorComponent implements OnInit{
   ngOnInit() {  }
 
+  constructor(private _router: Router) {
+  }
+
   @Input()
   type!: string
+  @Output() userIconClickEvent = new EventEmitter()
+
 }

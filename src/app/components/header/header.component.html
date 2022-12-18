@@ -1,45 +1,47 @@
-<header class="header" *ngIf="user">
+<header class="header">
   <div class="logoWrap">
     <h1 class="logoTitle">MeetUps</h1>
     <div>
-      <div>
-        <img src="./assets/logo-one.png" alt="ит-философия">
-      </div>
-      <div>
-        <img src="./assets/logo-two.png" alt="лига">
-      </div>
+      <img class="img" src="./assets/logo-one.png" alt="ит-философия">
+      <img class="img" src="./assets/logo-two.png" alt="лига">
     </div>
   </div>
-  <nav>
-    <ul class="navList">
-      <li class="navItem">
-        <a class="navLink"
-           routerLink=""
-           routerLinkActive="activeLink"
-           [routerLinkActiveOptions]="{exact:true}"
-        >
-          Все митапы
-        </a>
-      </li>
-      <li class="navItem">
-        <a class="navLink"
-           routerLink="/my-meetups"
-           routerLinkActive="activeLink"
-        >
-          Мои митапы
-        </a>
-      </li>
-      <li class="navItem" *ngIf="canGetUsersLink()">
-        <a class="navLink"
-           routerLink="/users"
-           routerLinkActive="activeLink"
-        >
-          Пользователи
-        </a>
-      </li>
-    </ul>
-  </nav>
-  <button class="btnLogout" (click)="logoutHandler()">
-    <app-svg-generator type="icon-exit"></app-svg-generator>
-  </button>
+  <ng-container *ngIf="user; else elseBlock">
+    <nav>
+      <ul class="navList">
+        <li class="navItem">
+          <a class="navLink"
+             routerLink=""
+             routerLinkActive="activeLink"
+             [routerLinkActiveOptions]="{exact:true}"
+          >
+            Все митапы
+          </a>
+        </li>
+        <li class="navItem">
+          <a class="navLink"
+             routerLink="/my-meetups"
+             routerLinkActive="activeLink"
+          >
+            Мои митапы
+          </a>
+        </li>
+        <li class="navItem" *ngIf="canGetUsersLink()">
+          <a class="navLink"
+             routerLink="/users"
+             routerLinkActive="activeLink"
+          >
+            Пользователи
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <button class="btnLogout" (click)="logoutHandler()">
+      <app-svg-generator type="icon-exit"></app-svg-generator>
+    </button>
+  </ng-container>
+  <ng-template #elseBlock>
+    <app-svg-generator type="user-icon" (userIconClickEvent)="userIconClickHandler()">
+    </app-svg-generator>
+  </ng-template>
 </header>
