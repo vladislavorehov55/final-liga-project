@@ -66,6 +66,7 @@ export class MeetupService {
       }
       return meetup
     })
+    this._meetups = meetups
     this.meetupsSubject.next(meetups)
   }
 
