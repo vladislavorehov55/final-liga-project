@@ -23,3 +23,9 @@
 .row {
   margin-bottom: 20px;
 }
+.input.ng-touched.ng-invalid{
+  border-color: red;
+}
+.errorMessage {
+  color: #fff;
+}

@@ -1,18 +1,23 @@
 <div class="page">
   <form class="form" [formGroup]="form" (submit)="submitHandler($event)">
-    <div class="row inputWrap">
-      <input formControlName="login"
-             placeholder="Введите логин"
-             class="input"
-      >
-    </div>
-    <div class="row inputWrap">
-      <input formControlName="password"
-             placeholder="Введите пароль"
-             class="input"
-             type="password"
-      >
-    </div>
+    <span class="errorMessage" *ngIf="loginError">{{loginError}}</span>
+    <input formControlName="login"
+           placeholder="Введите логин"
+           class="input row"
+           (focus)="onFocusLoginHandler()"
+           (blur)="onBlurLoginHandler()"
+    >
+
+    <span class="errorMessage" *ngIf="passwordError">{{passwordError}}</span>
+    <input formControlName="password"
+           placeholder="Введите пароль"
+           class="input row"
+           type="password"
+           (focus)="onFocusPasswordHandler()"
+           (blur)="onBlurPasswordHandler()"
+
+    >
+
     <div class="block">
       <a routerLink="/about" class="link">How to create account?</a>
       <button class="btnLogin">Log in</button>
