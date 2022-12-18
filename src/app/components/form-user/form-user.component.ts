@@ -43,14 +43,14 @@ export class FormUserComponent implements OnInit{
     this._formService.isShow = false
   }
 
-  userRole: string = 'user'
-
-  get chosenUserRole() {
-    return this.userRole
+  get userRole() {
+    return this._formService.userRole
   }
 
+
+
   changeUserRoleHandler(role: IRole) {
-    this.userRole = role.name
+    this._formService.userRole = role.name
   }
 
   addUserHandler() {
@@ -59,5 +59,10 @@ export class FormUserComponent implements OnInit{
       password: this.form.value.password,
       email: this.form.value.email
     })
+  }
+  updateUserHandler() {
+
+    // const {fio, password, email} = this.form.value
+    // this._userService.updateUser(fio, password, email, this.userRole, this.userRoleInit)
   }
 }

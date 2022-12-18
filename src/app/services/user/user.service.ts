@@ -34,7 +34,7 @@ export class UserService {
         if (userRole.toUpperCase() !== 'USER') {
           const body = {
             userId: parsedToken.id,
-            names: [parsedToken.roles[0].name, userRole]
+            names: [userRole]
           }
           this._http.post(`${this._baseURL}/user/role`, body)
             .subscribe(data => {
@@ -52,6 +52,28 @@ export class UserService {
         console.log('delete user', data)
         this.getDataUsers()
       })
+  }
+  editedUserId: number | null = null
+  updateUser(fio: string, password: string, email: string, userRole: string, userRoleInit: string) {
+    const body = password ? {fio, password, email} : {fio, email}
+    this._http.put(`${this._baseURL}/user/${this.editedUserId}`, body)
+      .subscribe((data: any) => {
+
+        if (userRole !== userRoleInit) {
+          const body = {
+            userId: data.id,
+            names: [userRole]
+          }
+          this._http.post(`${this._baseURL}/user/role`, body)
+            .subscribe(data => {
+              this.getDataUsers()
+            })
+        }
+        else {
+          this.getDataUsers()
+        }
+      })
+
   }
 
 }

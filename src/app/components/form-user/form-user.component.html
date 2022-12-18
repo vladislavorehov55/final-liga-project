@@ -17,14 +17,14 @@
     <div class="block">
       <label>Пароль</label>
       <div class="inputWrap">
-        <input type="text" formControlName="password" class="input">
+        <input type="text" placeholder="****" formControlName="password" class="input">
       </div>
     </div>
 
     <div class="roleBlock">
       <label>Роль</label>
       <div class="roleWrap">
-        <span>{{chosenUserRole}}</span>
+        <span>{{userRole}}</span>
         <ul class="selectUserWrap">
           <li class="selectUserItem"
               *ngFor="let role of roles"
@@ -43,7 +43,7 @@
         Создать
       </button>
       <ng-template #elseBtn>
-        <button type="submit">Сохранить</button>
+        <button type="submit" (click)="updateUserHandler()">Сохранить</button>
       </ng-template>
     </div>
   </form>

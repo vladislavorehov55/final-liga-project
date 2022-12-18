@@ -17,11 +17,14 @@ export class UserItemComponent implements OnInit{
   }
 
   openEditUserFormHandler() {
+    console.log('this.user.roles[0].name', this.user.roles[0].name)
+    this._userService.editedUserId = this.user.id
     this._formService.isShow = true
-    this._formService.setUserForm('EDIT_USER', 'Редактирование пользователя', {
+    this._formService.setUserForm('EDIT_USER',
+      'Редактирование пользователя',  this.user.roles[0].name,{
       fio: this.user.fio,
       email: this.user.email,
-      password: this.user.password
+      password: ''
     })
   }
   deleteUserHandler() {

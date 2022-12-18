@@ -16,14 +16,17 @@ export class FormService {
 
   formType: string = 'add_meetup'
 
+  userRole: string = ''
+
   form!: FormGroup
 
   constructor(private _userService: UserService) {
   }
 
-  setUserForm(formType: string, title: string, formFieldsValue: IUserFormFields ) {
+  setUserForm(formType: string, title: string, userRole: string, formFieldsValue: IUserFormFields ) {
     this.formType = formType
     this.title = title
+    this.userRole = userRole
     this.form = new FormGroup<any>({
       fio: new FormControl(formFieldsValue.fio),
       email: new FormControl(formFieldsValue.email),
