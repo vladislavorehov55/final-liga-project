@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {IMeetup, IMeetupResponse, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, concatAll, map, toArray} from "rxjs";
+import {BehaviorSubject, concatAll, map, Subscription, toArray} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
@@ -20,7 +20,7 @@ export class MeetupService {
     return this._meetups
   }
   meetupsSubject = new BehaviorSubject<IMeetup[]>([])
-
+  meetupsObservable = this.meetupsSubject.asObservable()
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
   private _getMeetupStatus(meetupTime: string, duration: number): MeetupStatusEnum {
@@ -55,7 +55,7 @@ export class MeetupService {
       )
       .subscribe((data: IMeetup[]) => {
         this._meetups = data
-        this.meetupsSubject.next(data)
+        this.meetupsSubject.next(this.meetups)
       })
   }
 
