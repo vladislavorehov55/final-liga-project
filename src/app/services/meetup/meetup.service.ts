@@ -20,7 +20,6 @@ export class MeetupService {
     return this._meetups
   }
   meetupsSubject = new BehaviorSubject<IMeetup[]>([])
-  meetupsObservable = this.meetupsSubject.asObservable()
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
   private _getMeetupStatus(meetupTime: string, duration: number): MeetupStatusEnum {

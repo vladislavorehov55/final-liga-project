@@ -15,7 +15,7 @@ export class MeetupsListComponent implements OnInit, OnDestroy {
   currentMeetups: IMeetup[] = []
   ngOnInit() {
     this._meetupService.getDataMeetups()
-    this.meetupsSubscription = this._meetupService.meetupsObservable.subscribe(items => {
+    this.meetupsSubscription = this._meetupService.meetupsSubject.subscribe(items => {
       console.log('subscribe', items)
       this.currentMeetups = items
       this._cdr.detectChanges()

@@ -4,27 +4,26 @@ import {EnvironmentService} from "../environment/environment.service";
 import {IUser, IUserDeleteResponse, IUserGetResponse} from "../../models/user";
 import {AuthService} from "../auth/auth.service";
 import {IParsedToken} from "../../models/parsedTokem";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private _baseURL: string = `${this._environmentService.environment.apiUrl}`
-  private _users!: IUserGetResponse[]
+
+  usersSubject = new BehaviorSubject<IUserGetResponse[]>([])
 
 
-  get users() {
-    return this._users
-  }
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService,
               private _authService: AuthService) {
   }
 
-  getDataUsers() {
+  getUsersData() {
     this._http.get<IUserGetResponse[]>(`${this._baseURL}/user`)
       .subscribe((users: IUserGetResponse[]) => {
-        this._users = users
-        console.log('users', users)
+        // this._users = users
+        this.usersSubject.next(users)
       })
   }
   addUser(userRole: string, newUser: IUser) {
@@ -38,11 +37,11 @@ export class UserService {
           }
           this._http.post(`${this._baseURL}/user/role`, body)
             .subscribe(data => {
-              this.getDataUsers()
+              this.getUsersData()
             })
         }
         else {
-          this.getDataUsers()
+          this.getUsersData()
         }
       })
   }
@@ -50,7 +49,7 @@ export class UserService {
     this._http.delete<IUserDeleteResponse>(`${this._baseURL}/user/${id}`)
       .subscribe((data) => {
         console.log('delete user', data)
-        this.getDataUsers()
+        this.getUsersData()
       })
   }
   editedUserId: number | null = null
@@ -66,11 +65,11 @@ export class UserService {
           }
           this._http.post(`${this._baseURL}/user/role`, body)
             .subscribe(data => {
-              this.getDataUsers()
+              this.getUsersData()
             })
         }
         else {
-          this.getDataUsers()
+          this.getUsersData()
         }
       })
 

@@ -32,6 +32,7 @@ export class FormUserComponent implements OnInit, AfterContentChecked{
   }
 
   get title() {
+    console.log('Render form user')
     return this._formService.title
   }
 
@@ -51,7 +52,10 @@ export class FormUserComponent implements OnInit, AfterContentChecked{
     return this._formService.userRole
   }
 
-
+  get changeDetect() {
+    console.log('Render form user')
+    return ''
+  }
 
   changeUserRoleHandler(role: IRole) {
     this._formService.userRole = role.name

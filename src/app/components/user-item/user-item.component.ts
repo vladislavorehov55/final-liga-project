@@ -1,12 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {IUser, IUserGetResponse} from "../../models/user";
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {IUserGetResponse} from "../../models/user";
 import {UserService} from "../../services/user/user.service";
 import {FormService} from "../../services/form/form.service";
 
 @Component({
   selector: 'app-user-item',
   templateUrl: './user-item.component.html',
-  styleUrls: ['./user-item.component.scss']
+  styleUrls: ['./user-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserItemComponent implements OnInit{
   @Input()
@@ -17,7 +18,6 @@ export class UserItemComponent implements OnInit{
   }
 
   openEditUserFormHandler() {
-    console.log('this.user.roles[0].name', this.user.roles[0].name)
     this._userService.editedUserId = this.user.id
     this._formService.isShow = true
     this._formService.setUserForm('EDIT_USER',
@@ -29,5 +29,10 @@ export class UserItemComponent implements OnInit{
   }
   deleteUserHandler() {
     this._userService.deleteUser(this.user.id)
+  }
+
+  get changeDetect() {
+    console.log('Render user item')
+    return ''
   }
 }
