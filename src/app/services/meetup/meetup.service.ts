@@ -160,29 +160,19 @@ export class MeetupService {
       })
   }
 
-  private _searchedMeetups: IMeetup[] | null = null
-
-  get searchedMeetups() {
-    return this._searchedMeetups
-  }
-  set searchedMeetups(newMeetups) {
-    this._searchedMeetups = newMeetups
-  }
-
   searchMeetups(value: string) {
     if (value === '') {
-      this.searchedMeetups = null
+      this.meetupsSubject.next(this.meetups)
       return
     }
-    this.searchedMeetups = this.meetups.filter(meetup => {
-      return meetup.name.includes(value) || meetup.description.includes(value) ||
-        meetup.location.includes(value) || meetup.duration === +value ||
-        meetup.target_audience.includes(value) || meetup.will_happen.includes(value) ||
-        meetup.need_to_know.includes(value) || meetup.reason_to_come.includes(value) ||
-        new Date(this.meetups[0].time).toLocaleDateString('ru',
-          {day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit'}).includes(value)
+    const searchedMeetups = this.meetups.filter(meetup => {
+      return meetup.name?.toLowerCase().includes(value) || meetup.description?.includes(value) ||
+        meetup.location?.toLowerCase().includes(value) || (meetup.duration || null) === +value ||
+        meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
+        meetup.need_to_know?.toLowerCase().includes(value) || meetup.reason_to_come?.toLowerCase().includes(value) ||
+        (meetup.time ? new Date(meetup.time).toLocaleDateString('ru',
+          {day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit'}).includes(value) : null)
     })
+    this.meetupsSubject.next(searchedMeetups)
   }
-
-
 }
