@@ -29,6 +29,16 @@ export class AuthPageComponent implements OnInit {
         validators: [Validators.required]
       })
     })
+    this.form.get('login')?.valueChanges.subscribe((value) => {
+      if (value === '') {
+        this.form.controls.login.reset()
+      }
+    })
+    this.form.get('password')?.valueChanges.subscribe((value) => {
+      if (value === '') {
+        this.form.controls.password.reset()
+      }
+    })
   }
 
   loginError: string = ''
@@ -53,6 +63,7 @@ export class AuthPageComponent implements OnInit {
     }
   }
   onFocusPasswordHandler() {
+    this.passwordError = ''
     if (this.form.controls.password.invalid) {
       this.form.controls.password.reset()
     }
@@ -60,6 +71,10 @@ export class AuthPageComponent implements OnInit {
   submitHandler(event: SubmitEvent) {
     event.preventDefault()
     this._authService.login(this.form.value.login, this.form.value.password)
+  }
+
+  get serverError() {
+    return this._authService.serverError
   }
 
 }

@@ -1,5 +1,6 @@
 <div class="page">
   <form class="form" [formGroup]="form" (submit)="submitHandler($event)">
+    <span class="errorMessage">{{serverError}}</span>
     <span class="errorMessage" *ngIf="loginError">{{loginError}}</span>
     <input formControlName="login"
            placeholder="Введите логин"
@@ -17,7 +18,6 @@
            (blur)="onBlurPasswordHandler()"
 
     >
-
     <div class="block">
       <a routerLink="/about" class="link">How to create account?</a>
       <button class="btnLogin">Log in</button>
