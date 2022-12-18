@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterContentChecked} from '@angular/core';
 import {FormService} from "../../services/form/form.service";
 import {RoleService} from "../../services/role/role.service";
 import {IRole} from "../../models/role";
@@ -10,9 +10,13 @@ import {UserService} from "../../services/user/user.service";
   templateUrl: './form-user.component.html',
   styleUrls: ['./form-user.component.scss']
 })
-export class FormUserComponent implements OnInit{
+export class FormUserComponent implements OnInit, AfterContentChecked{
   constructor(private _formService: FormService, private _roleService: RoleService,
               private _userService: UserService) {
+  }
+  userRoleInit = ''
+  ngAfterContentChecked() {
+    this.userRoleInit = this.userRoleInit == '' ? this.userRole : this.userRoleInit
   }
 
   ngOnInit() {
@@ -61,8 +65,7 @@ export class FormUserComponent implements OnInit{
     })
   }
   updateUserHandler() {
-
-    // const {fio, password, email} = this.form.value
-    // this._userService.updateUser(fio, password, email, this.userRole, this.userRoleInit)
+    const {fio, password, email} = this.form.value
+    this._userService.updateUser(fio, password, email, this.userRole, this.userRoleInit)
   }
 }
