@@ -1,15 +1,11 @@
 @import "../../../scss-var/variables";
 @import "../../../../styles";
 .page {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: $page-padding;
-  background: $bg-dark;
 }
 .form {
-  flex-basis: 340px;
+  margin: 100px auto 0;
+  max-width: 340px;
 }
 .block {
   display: flex;
