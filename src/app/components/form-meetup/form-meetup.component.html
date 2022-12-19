@@ -63,14 +63,14 @@
     <textarea class="textareaReason" formControlName="reason_to_come"></textarea>
     <div class="btnWrap">
       <button *ngIf="formMethodType==='ADD'; else elseBlock"
-              class="btn"
+              class="btnCreate"
               type="submit"
               (click)="addMeetupHandler()"
       >
         Создать
       </button>
       <ng-template #elseBlock>
-        <button class="btn" (click)="editMeetupHandler()">Сохранить</button>
+        <button class="btnCreate" (click)="editMeetupHandler()">Сохранить</button>
       </ng-template>
     </div>
 

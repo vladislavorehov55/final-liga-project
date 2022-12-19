@@ -56,11 +56,12 @@
     <div class="btnWrap">
       <button type="submit" *ngIf="formMethodType==='ADD'; else elseBtn"
               (click)="addUserHandler()"
+              class="btnCreate"
       >
         Создать
       </button>
       <ng-template #elseBtn>
-        <button type="submit" (click)="updateUserHandler()">Сохранить</button>
+        <button type="submit" (click)="updateUserHandler()" class="btnCreate">Сохранить</button>
       </ng-template>
     </div>
   </form>
