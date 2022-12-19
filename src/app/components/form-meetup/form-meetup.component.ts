@@ -143,7 +143,7 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
     }
   }
   private validateName(value: string) {
-    if (value === '') {
+    if (!Boolean(value)) {
       return {invalidName: 'Не заполнено'}
     }
     if (value.length > 50) {
@@ -152,7 +152,7 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
     return null
   }
   private validateDate(value: string) {
-    if (value === '') {
+    if (!Boolean(value)) {
       return {invalidDate: 'Поле не заполнено'}
     }
     if (value.length !== 10) {
@@ -168,7 +168,7 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
     return null
   }
   private validateTime(value: string) {
-    if (value === '') {
+    if (!Boolean(value)) {
       return {invalidTime: 'Не заполнено'}
     }
     if (value.length !== 5) {
@@ -190,7 +190,7 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
     return null
   }
   private validateLocation(value: string) {
-    if (value === '') {
+    if (!Boolean(value)) {
       return {invalidLocation: 'Поле не заполнено'}
     }
     return null
@@ -222,6 +222,10 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
   }
 
   closeFormHandler() {
+    this._timeError = ''
+    this._dateError = ''
+    this._timeError = ''
+    this._locationError = ''
     this._formService.closeForm()
   }
 
