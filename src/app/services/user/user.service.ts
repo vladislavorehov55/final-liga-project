@@ -4,26 +4,41 @@ import {EnvironmentService} from "../environment/environment.service";
 import {IUser, IUserDeleteResponse, IUserGetResponse} from "../../models/user";
 import {AuthService} from "../auth/auth.service";
 import {IParsedToken} from "../../models/parsedTokem";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, catchError, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private _baseURL: string = `${this._environmentService.environment.apiUrl}`
-
+  private _errorMessage = 'Произошла ошибка! Пожалуйста перезагурзите страницу'
   usersSubject = new BehaviorSubject<IUserGetResponse[]>([])
-  userObservable = this.usersSubject.asObservable()
+  // userObservable = this.usersSubject.asObservable()
+
+  // Error
+  private _usersErrorSubject = new BehaviorSubject<string>('')
+  get usersErrorSubject() {
+    return this._usersErrorSubject
+  }
+  //
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService,
               private _authService: AuthService) {
   }
 
   getUsersData() {
-    this._http.get<IUserGetResponse[]>(`${this._baseURL}/user`)
-      .subscribe((users: IUserGetResponse[]) => {
-        // this._users = users
-        this.usersSubject.next(users)
+    this._http.get<IUserGetResponse[]>(`${this._baseURL}/.user`)
+      .pipe(
+        catchError(err => throwError(err))
+      )
+      .subscribe({
+        next: (users: IUserGetResponse[]) => {
+          // this._users = users
+          this.usersSubject.next(users)
+        },
+        error: err => {
+          this._usersErrorSubject.error(this._errorMessage)
+        }
       })
   }
   addUser(userRole: string, newUser: IUser) {
