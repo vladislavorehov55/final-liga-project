@@ -27,7 +27,7 @@ export class UserService {
   }
 
   getUsersData() {
-    this._http.get<IUserGetResponse[]>(`${this._baseURL}/.user`)
+    this._http.get<IUserGetResponse[]>(`${this._baseURL}/user`)
       .pipe(
         catchError(err => throwError(err))
       )
@@ -43,28 +43,44 @@ export class UserService {
   }
   addUser(userRole: string, newUser: IUser) {
     this._http.post<{token: string}>(`${this._baseURL}/auth/registration`, newUser)
-      .subscribe(({token}) => {
-        const parsedToken: IParsedToken = this._authService.parseJwt(token)
-        if (userRole.toUpperCase() !== 'USER') {
-          const body = {
-            userId: parsedToken.id,
-            names: [userRole]
+      .pipe(
+        catchError(err => throwError(err))
+      )
+      .subscribe({
+        next: ({token}) => {
+          const parsedToken: IParsedToken = this._authService.parseJwt(token)
+          if (userRole.toUpperCase() !== 'USER') {
+            const body = {
+              userId: parsedToken.id,
+              names: [userRole]
+            }
+            this._http.post(`${this._baseURL}/user/role`, body)
+              .subscribe(data => {
+                this.getUsersData()
+              })
           }
-          this._http.post(`${this._baseURL}/user/role`, body)
-            .subscribe(data => {
-              this.getUsersData()
-            })
-        }
-        else {
-          this.getUsersData()
+          else {
+            this.getUsersData()
+          }
+        },
+        error: (err) => {
+          this._usersErrorSubject.error(this._errorMessage)
         }
       })
   }
   deleteUser(id: number) {
     this._http.delete<IUserDeleteResponse>(`${this._baseURL}/user/${id}`)
-      .subscribe((data) => {
-        console.log('delete user', data)
-        this.getUsersData()
+      .pipe(
+        catchError(err => throwError(err))
+      )
+      .subscribe({
+        next: (data) => {
+          console.log('delete user', data)
+          this.getUsersData()
+        },
+        error: (err) => {
+          this._usersErrorSubject.error(this._errorMessage)
+        }
       })
   }
   editedUserId: number | null = null
