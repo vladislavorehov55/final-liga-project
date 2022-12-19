@@ -208,8 +208,16 @@ export class MeetupService {
   editMeetup(form: FormGroup) {
     const editedMeetUp = this._getMeetUpToRequest(form)
     this.http.put<IMeetupResponse>(`${this._baseURL}/meetup/${this.editedMeetupID}`, editedMeetUp)
-      .subscribe(meetup => {
-        this.getDataMeetups()
+      .pipe(
+        catchError(err => throwError(err))
+      )
+      .subscribe({
+        next: (meetup) => {
+          this.getDataMeetups()
+        },
+        error: err => {
+          this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
+        }
       })
   }
 
