@@ -20,6 +20,7 @@ export class UserService {
   get usersErrorSubject() {
     return this._usersErrorSubject
   }
+
   //
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService,
@@ -41,8 +42,9 @@ export class UserService {
         }
       })
   }
+
   addUser(userRole: string, newUser: IUser) {
-    this._http.post<{token: string}>(`${this._baseURL}/auth/registration`, newUser)
+    this._http.post<{ token: string }>(`${this._baseURL}/auth/registration`, newUser)
       .pipe(
         catchError(err => throwError(err))
       )
@@ -58,8 +60,7 @@ export class UserService {
               .subscribe(data => {
                 this.getUsersData()
               })
-          }
-          else {
+          } else {
             this.getUsersData()
           }
         },
@@ -68,6 +69,7 @@ export class UserService {
         }
       })
   }
+
   deleteUser(id: number) {
     this._http.delete<IUserDeleteResponse>(`${this._baseURL}/user/${id}`)
       .pipe(
@@ -83,27 +85,34 @@ export class UserService {
         }
       })
   }
+
   editedUserId: number | null = null
+
   updateUser(fio: string, password: string, email: string, userRole: string, userRoleInit: string) {
     const body = {fio, password, email}
     this._http.put(`${this._baseURL}/user/${this.editedUserId}`, body)
-      .subscribe((data: any) => {
-
-        if (userRole !== userRoleInit) {
-          const body = {
-            userId: data.id,
-            names: [userRole]
+      .pipe(
+        catchError(err => throwError(err))
+      )
+      .subscribe({
+        next: (data: any) => {
+          if (userRole !== userRoleInit) {
+            const body = {
+              userId: data.id,
+              names: [userRole]
+            }
+            this._http.post(`${this._baseURL}/user/role`, body)
+              .subscribe(data => {
+                this.getUsersData()
+              })
+          } else {
+            this.getUsersData()
           }
-          this._http.post(`${this._baseURL}/user/role`, body)
-            .subscribe(data => {
-              this.getUsersData()
-            })
-        }
-        else {
-          this.getUsersData()
+        },
+        error: (err) => {
+          this._usersErrorSubject.error(this._errorMessage)
         }
       })
-
   }
 
 }
