@@ -23,10 +23,10 @@ export class MeetupsPageComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     this._errorSubscription = this._meetupsService.meetupsErrorSubject.subscribe({
-      next: (err) => {
+      error: (err) => {
         this._serverError = err
         this._cdr.detectChanges()
-      }
+      },
     })
   }
   ngOnDestroy() {

@@ -70,8 +70,7 @@ export class MeetupService {
           this.meetupsSubject.next(this.meetups)
         },
         error: (err) => {
-          console.log('er1r', err)
-          this._meetupsErrorSubject.next('Произошла критическая ошибка')
+          this._meetupsErrorSubject.error('Произошла критическая ошибка')
         }
       })
 
@@ -115,7 +114,7 @@ export class MeetupService {
           this.meetupsSubject.next(data)
         },
         error: err => {
-          this._meetupsErrorSubject.next('Произошла ошибка! Пожалуйста перезагрузите страницу')
+          this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
         }
       })
 
@@ -150,20 +149,38 @@ export class MeetupService {
           this.meetupsSubject.next(data)
         },
         error: (err) => {
-          this._meetupsErrorSubject.next('Произошла ошибка! Пожалуйста перезагрузите страницу')
+          this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
         }
       })
   }
 
   addMeetup(meetup: IMeetupAddFieldsReq) {
     this.http.post<IMeetup>(`${this._baseURL}/meetup`, meetup)
-      .subscribe(data => this.getDataMeetups())
+      .pipe(
+        catchError(err => throwError(err))
+      )
+      .subscribe({
+        next: (data) => {
+          this.getDataMeetups()
+        },
+        error: (err) => {
+          this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
+        }
+      })
   }
 
   deleteMeetup(meetupID: number) {
     this.http.delete<IMeetupResponse>(`${this._baseURL}/meetup/${meetupID}`)
-      .subscribe(() => {
-        this.getDataMeetups()
+      .pipe(
+        catchError(err => throwError(err)),
+      )
+      .subscribe({
+        next: () => {
+          this.getDataMeetups()
+        },
+        error: (err) => {
+          this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
+        }
       })
   }
 
