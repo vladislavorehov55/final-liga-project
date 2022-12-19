@@ -10,6 +10,7 @@ import {FormService} from "../../services/form/form.service";
 import {RoleService} from "../../services/role/role.service";
 import {IRole} from "../../models/role";
 import {UserService} from "../../services/user/user.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-form-user',
@@ -23,7 +24,7 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
   private _passwordError: string = ''
   private _isShow: boolean = false
   private _userRoleInit = ''
-
+  private _isShowSubscription!: Subscription
 
   constructor(private _formService: FormService, private _roleService: RoleService,
               private _userService: UserService, private _cdr: ChangeDetectorRef) {
@@ -40,14 +41,14 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
 
   ngOnInit() {
     this._roleService.getDataRoles()
-    this._formService.isShowUserForm.subscribe(isShow => {
+    this._isShowSubscription = this._formService.isShowUserForm.subscribe(isShow => {
       this._isShow = isShow
       this._cdr.detectChanges()
     })
   }
 
   ngOnDestroy() {
-    this._formService.isShowUserForm.unsubscribe()
+    this._isShowSubscription.unsubscribe()
   }
 
   get roles() {

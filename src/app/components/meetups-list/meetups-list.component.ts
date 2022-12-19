@@ -11,19 +11,18 @@ import {Subscription} from "rxjs";
 })
 export class MeetupsListComponent implements OnInit, OnDestroy {
   constructor(private _meetupService: MeetupService, private _cdr: ChangeDetectorRef) {}
-  meetupsSubscription!: Subscription
+  private _meetupsSubscription!: Subscription
   currentMeetups: IMeetup[] = []
   ngOnInit() {
     this._meetupService.getDataMeetups()
-    this.meetupsSubscription = this._meetupService.meetupsSubject.subscribe(items => {
+    this._meetupsSubscription = this._meetupService.meetupsSubject.subscribe(items => {
       console.log('subscribe', items)
       this.currentMeetups = items
       this._cdr.detectChanges()
     })
   }
   ngOnDestroy() {
-    this.meetupsSubscription.unsubscribe()
-    console.log('destroy')
+    this._meetupsSubscription.unsubscribe()
   }
 
 

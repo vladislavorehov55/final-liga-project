@@ -24,6 +24,7 @@ import {Subscription} from "rxjs";
 })
 export class FormMeetupComponent implements OnInit, OnDestroy{
   private _isShow: boolean = false
+  private _isShowSubscription!: Subscription
   constructor(private _formService: FormService,
               private _meetupService: MeetupService,
               private _cdr: ChangeDetectorRef
@@ -31,13 +32,13 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
-    this._formService.isShowMeetupForm.subscribe(isShow => {
+    this._isShowSubscription = this._formService.isShowMeetupForm.subscribe(isShow => {
       this._isShow = isShow
       this._cdr.detectChanges()
     })
   }
   ngOnDestroy() {
-    this._formService.isShowMeetupForm.unsubscribe()
+    this._isShowSubscription.unsubscribe()
   }
 
   get form() {

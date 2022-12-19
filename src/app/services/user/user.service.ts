@@ -13,7 +13,7 @@ export class UserService {
   private _baseURL: string = `${this._environmentService.environment.apiUrl}`
 
   usersSubject = new BehaviorSubject<IUserGetResponse[]>([])
-
+  userObservable = this.usersSubject.asObservable()
 
   constructor(private _http: HttpClient, private _environmentService: EnvironmentService,
               private _authService: AuthService) {
