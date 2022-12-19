@@ -54,7 +54,7 @@ export class UserService {
   }
   editedUserId: number | null = null
   updateUser(fio: string, password: string, email: string, userRole: string, userRoleInit: string) {
-    const body = password ? {fio, password, email} : {fio, email}
+    const body = {fio, password, email}
     this._http.put(`${this._baseURL}/user/${this.editedUserId}`, body)
       .subscribe((data: any) => {
 

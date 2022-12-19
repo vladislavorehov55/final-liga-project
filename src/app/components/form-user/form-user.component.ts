@@ -17,7 +17,7 @@ import {UserService} from "../../services/user/user.service";
   styleUrls: ['./form-user.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy{
+export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy {
   private _fioError: string = ''
   private _emailError: string = ''
   private _passwordError: string = ''
@@ -28,9 +28,16 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
   constructor(private _formService: FormService, private _roleService: RoleService,
               private _userService: UserService, private _cdr: ChangeDetectorRef) {
   }
+
   ngAfterContentChecked() {
+    if (this._formService.formMethodType === 'EDIT') {
+      const password = this.form.controls['password']
+      password.clearValidators()
+      password.updateValueAndValidity()
+    }
     this._userRoleInit = this._userRoleInit == '' ? this.userRole : this._userRoleInit
   }
+
   ngOnInit() {
     this._roleService.getDataRoles()
     this._formService.isShowUserForm.subscribe(isShow => {
@@ -38,6 +45,7 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
       this._cdr.detectChanges()
     })
   }
+
   ngOnDestroy() {
     this._formService.isShowUserForm.unsubscribe()
   }
@@ -84,13 +92,20 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   addUserHandler() {
-    this._userService.addUser(this.userRole,{
+    if (this.form.invalid) {
+      return
+    }
+    this._userService.addUser(this.userRole, {
       fio: this.form.value.fio,
       password: this.form.value.password,
       email: this.form.value.email
     })
   }
+
   updateUserHandler() {
+    if (this.form.invalid) {
+      return
+    }
     const {fio, password, email} = this.form.value
     this._userService.updateUser(fio, password, email, this.userRole, this._userRoleInit)
   }
@@ -99,12 +114,15 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
   get fioError() {
     return this._fioError
   }
+
   get emailError() {
     return this._emailError
   }
+
   get passwordError() {
     return this._passwordError
   }
+
   onBlurInputHandler(e: any) {
     const {name} = e.target
     switch (name) {
@@ -118,13 +136,13 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
         if (error) {
           if (error['required']) {
             this._emailError = 'Поле не заполнено'
-          }
-          else if (error['email']) {
+          } else if (error['email']) {
             this._emailError = 'Некорректный'
           }
         }
         break
       case 'password':
+
         if (this.form.controls[name].errors) {
           this._passwordError = 'Поле не заполнено'
         }
