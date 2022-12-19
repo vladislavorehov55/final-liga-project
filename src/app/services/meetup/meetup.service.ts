@@ -39,8 +39,14 @@ export class MeetupService {
     }
   }
 
+  // Errror
+  private _meetupsErrorSubject = new BehaviorSubject<string>('')
+  get meetupsErrorSubject() {
+    return this._meetupsErrorSubject
+  }
+  ///
   getDataMeetups() {
-    this.http.get<IMeetupResponse[]>(`${this._baseURL}//meetup`)
+    this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
       .pipe(
         catchError(err => throwError(err)),
         concatAll(),
@@ -61,8 +67,9 @@ export class MeetupService {
           this.meetupsSubject.next(this.meetups)
         },
         error: (err) => {
-          console.log('err',err)
-          this.meetupsSubject.error(err.message)
+          console.log('er1r',err)
+          this._meetupsErrorSubject.next('Произошла критическая ошибка')
+          // this.meetupsSubject.error(err.message)
         }
       })
 

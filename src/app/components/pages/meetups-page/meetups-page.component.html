@@ -1,8 +1,16 @@
 <div class="page">
-  <app-search></app-search>
-  <div class="btnWrap">
-    <button class="btnCreate" (click)="openFormHandler()">Создать митап</button>
-  </div>
-  <app-meetups-list></app-meetups-list>
-  <app-form-meetup></app-form-meetup>
+  <ng-container *ngIf="serverError === ''; else elseBlock">
+    <app-search></app-search>
+    <div class="btnWrap">
+      <button class="btnCreate" (click)="openFormHandler()">Создать митап</button>
+    </div>
+    <app-meetups-list></app-meetups-list>
+    <app-form-meetup></app-form-meetup>
+  </ng-container>
+
+  <ng-template #elseBlock>
+    <h1 class="errorMessage error">{{serverError}}</h1>
+  </ng-template>
+
+
 </div>
