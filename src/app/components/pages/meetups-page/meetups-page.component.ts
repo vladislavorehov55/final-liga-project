@@ -12,9 +12,6 @@ export class MeetupsPageComponent {
   }
 
   openFormHandler() {
-
-    this._formService.isShow = true
-    console.log('ma')
     this._formService.setForm('MEETUP', 'ADD',  'Создания митапа', '', {
       name: '',
       description: '',
@@ -27,5 +24,6 @@ export class MeetupsPageComponent {
       date:  '',
       time: ''
     })
+    this._formService.openForm()
   }
 }

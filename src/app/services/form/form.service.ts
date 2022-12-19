@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../user/user.service";
+import {BehaviorSubject} from "rxjs";
 
 interface IUserFormFields {
   fio: string
@@ -42,8 +43,8 @@ interface IMeetupFormGroup {
 })
 export class FormService {
   title: string = ''
-  isShow: boolean = false
-
+  isShowUserForm = new BehaviorSubject(false)
+  isShowMeetupForm = new BehaviorSubject(false)
   formType: string = ''
   formMethodType: string = ''
   userRole: string = ''
@@ -51,6 +52,29 @@ export class FormService {
   form!: FormGroup
 
   constructor(private _userService: UserService) {
+  }
+
+  openForm() {
+    switch (this.formType) {
+      case 'USER':
+        this.isShowUserForm.next(true)
+        console.log('qweee')
+
+        break
+      case 'MEETUP':
+        this.isShowMeetupForm.next(true)
+        break
+    }
+  }
+  closeForm() {
+    switch (this.formType) {
+      case 'USER':
+        this.isShowUserForm.next(false)
+        break
+      case 'MEETUP':
+        this.isShowMeetupForm.next(false)
+        break
+    }
   }
 
   setForm(formType: string, formMethodType: string, title: string, userRole: string, formFieldsValue: IUserFormFields | IMeetupFormFields ) {

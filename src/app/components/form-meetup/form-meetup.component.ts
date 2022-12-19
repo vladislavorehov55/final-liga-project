@@ -1,31 +1,45 @@
-import { Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, OnDestroy} from '@angular/core';
 import {MeetupService} from "../../services/meetup/meetup.service";
 import {FormService} from "../../services/form/form.service";
+import {Subscription} from "rxjs";
 
 
-export interface IFormFields {
-  name: string
-  description: string
-  date: string
-  time: string
-  duration: number
-  location: string
-  target_audience: string
-  need_to_know: string
-  will_happen: string,
-  reason_to_come: string
-}
+// export interface IFormFields {
+//   name: string
+//   description: string
+//   date: string
+//   time: string
+//   duration: number
+//   location: string
+//   target_audience: string
+//   need_to_know: string
+//   will_happen: string,
+//   reason_to_come: string
+// }
 
 @Component({
   selector: 'app-form-meetup',
   templateUrl: './form-meetup.component.html',
   styleUrls: ['./form-meetup.component.scss']
 })
-export class FormMeetupComponent{
-
+export class FormMeetupComponent implements OnInit, OnDestroy{
+  private _isShow: boolean = false
   constructor(private _formService: FormService,
-              private _meetupService: MeetupService) {
+              private _meetupService: MeetupService,
+              private _cdr: ChangeDetectorRef
+              ) {
   }
+
+  ngOnInit() {
+    this._formService.isShowMeetupForm.subscribe(isShow => {
+      this._isShow = isShow
+      this._cdr.detectChanges()
+    })
+  }
+  ngOnDestroy() {
+    this._formService.isShowMeetupForm.unsubscribe()
+  }
+
   get form() {
     return this._formService.form
   }
@@ -33,17 +47,14 @@ export class FormMeetupComponent{
     return this._formService.title
   }
 
-
-
   get isShow() {
-    return this._formService.isShow
+    return this._isShow
   }
   get formMethodType() {
     return this._formService.formMethodType
   }
 
-  ngOnInit() {
-  }
+
 
   addMeetupHandler() {
     const newMeetup: any = {}
@@ -70,7 +81,7 @@ export class FormMeetupComponent{
   }
 
   closeFormHandler() {
-    this._formService.isShow = false
+    this._formService.closeForm()
   }
 
 }

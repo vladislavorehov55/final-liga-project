@@ -1,4 +1,11 @@
-import {AfterContentChecked, ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import {FormService} from "../../services/form/form.service";
 import {RoleService} from "../../services/role/role.service";
 import {IRole} from "../../models/role";
@@ -10,17 +17,24 @@ import {UserService} from "../../services/user/user.service";
   styleUrls: ['./form-user.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormUserComponent implements OnInit, AfterContentChecked{
+export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy{
   constructor(private _formService: FormService, private _roleService: RoleService,
-              private _userService: UserService) {
+              private _userService: UserService, private _cdr: ChangeDetectorRef) {
   }
   userRoleInit = ''
   ngAfterContentChecked() {
     this.userRoleInit = this.userRoleInit == '' ? this.userRole : this.userRoleInit
   }
-
+  private _isShow: boolean = false
   ngOnInit() {
     this._roleService.getDataRoles()
+    this._formService.isShowUserForm.subscribe(isShow => {
+      this._isShow = isShow
+      this._cdr.detectChanges()
+    })
+  }
+  ngOnDestroy() {
+    this._formService.isShowUserForm.unsubscribe()
   }
 
   get roles() {
@@ -37,7 +51,7 @@ export class FormUserComponent implements OnInit, AfterContentChecked{
   }
 
   get isShow() {
-    return this._formService.isShow
+    return this._isShow
   }
 
   get formMethodType() {
@@ -45,7 +59,7 @@ export class FormUserComponent implements OnInit, AfterContentChecked{
   }
 
   closeFormHandler() {
-    this._formService.isShow = false
+    this._formService.closeForm()
   }
 
   get userRole() {

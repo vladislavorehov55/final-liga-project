@@ -19,13 +19,13 @@ export class UserItemComponent implements OnInit{
 
   openEditUserFormHandler() {
     this._userService.editedUserId = this.user.id
-    this._formService.isShow = true
     this._formService.setForm('USER', 'EDIT',
       'Редактирование пользователя',  this.user.roles[0].name,{
       fio: this.user.fio,
       email: this.user.email,
       password: ''
     })
+    this._formService.openForm()
   }
   deleteUserHandler() {
     this._userService.deleteUser(this.user.id)

@@ -81,7 +81,6 @@ export class MeetupItemComponent implements OnInit{
   }
   editMeetupHandler() {
     this._meetupService.editedMeetupID = this.meetup.id
-    this._formService.isShow = true
     const {name, description, duration, location, target_audience, need_to_know,
       will_happen, reason_to_come, time } = this.meetup
     const arr = new Date(time).toLocaleString().split(', ')
@@ -89,5 +88,6 @@ export class MeetupItemComponent implements OnInit{
       name, description, duration, location, target_audience, need_to_know,
       will_happen, reason_to_come, date: arr[0], time: arr[1].slice(0, 5)
     })
+    this._formService.openForm()
   }
 }

@@ -12,12 +12,12 @@ export class UsersPageComponent {
   constructor(private _formService: FormService) {
   }
   openUserCreationForm() {
-    this._formService.isShow = true
     this._formService.setForm('USER', 'ADD','Создание пользователя', 'user',{
       fio: '',
       email: '',
       password: ''
     })
+    this._formService.openForm()
   }
 
 }
