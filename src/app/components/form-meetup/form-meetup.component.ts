@@ -26,6 +26,13 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
   private _isShow: boolean = false
   private _isShowSubscription!: Subscription
 
+  private _timeError: string = ''
+  private _nameError: string = ''
+  private _dateError: string = ''
+  private _locationError: string = ''
+
+
+
   constructor(private _formService: FormService,
               private _meetupService: MeetupService,
               private _cdr: ChangeDetectorRef
@@ -62,64 +69,131 @@ export class FormMeetupComponent implements OnInit, OnDestroy{
     return this._formService.formMethodType
   }
 
-
-  get nameError() {
-    return this._formService.nameError
-  }
-
-  get dateError() {
-    return this._formService.dateError
-  }
-
   get timeError() {
-    return this._formService.timeError
+    return this._timeError
   }
-
+  get nameError() {
+    return this._nameError
+  }
+  get dateError() {
+    return this._dateError
+  }
   get locationError() {
-    return this._formService.locationError
+    return this._locationError
   }
 
   focusInputHandler(e: any) {
     const {name} = e.target
-    if (this.form.controls[name].invalid) {
-      this.form.controls[name].reset()
-      switch (name) {
-        case 'name':
-          this._formService._nameError = ''
-          break
-        case 'date':
-          this._formService._dateError = ''
-          break
-        case 'time':
-          this._formService._timeError = ''
-          break
-        case 'location':
-          this._formService._locationError = ''
-          break
-      }
+    switch (name) {
+      case 'name':
+        if (this.nameError) {
+          this.form.controls[name].reset()
+          this._nameError = ''
+        }
+        break
+      case 'date':
+        if (this.dateError) {
+          this.form.controls[name].reset()
+          this._dateError = ''
+        }
+        break
+      case 'time':
+        if (this.timeError) {
+          this.form.controls[name].reset()
+          this._timeError = ''
+        }
+        break
+      case 'location':
+        if (this.locationError) {
+          this.form.controls[name].reset()
+          this._locationError = ''
+        }
+        break
     }
   }
 
   blurInputHandler(e: any) {
     const {name} = e.target
-    const {errors} = this.form.controls[name]
-    if (errors) {
-      switch (name) {
-        case 'name':
-          this._formService._nameError = errors['required'] ? 'Поле не заполнено' : 'Максимальная длина 50 символов'
-          break
-        case 'date':
-          this._formService._dateError = errors['required'] ? 'Поле не заполнено' : errors['invalidDate']
-          break
-        case 'time':
-          this._formService._timeError = errors['required'] ? 'Поле не заполнено' : errors['invalidTime']
-          break
-        case 'location':
-          this._formService._locationError = 'Поле не заполнено'
-          break
-      }
+    const inputValue = this.form.value[name]
+    let error
+    switch (name) {
+      case 'name':
+        error = this.validateName(inputValue)
+        if (error) {
+          this._nameError = error.invalidName
+        }
+        break
+      case 'date':
+        error = this.validateDate(inputValue)
+        if (error) {
+          this._dateError = error.invalidDate
+        }
+        break
+      case 'time':
+        error = this.validateTime(inputValue)
+        if (error) {
+          this._timeError = error.invalidTime
+        }
+        break
+      case 'location':
+        error = this.validateLocation(inputValue)
+        if (error) {
+          this._locationError = error.invalidLocation
+        }
     }
-
+  }
+  private validateName(value: string) {
+    if (value === '') {
+      return {invalidName: 'Не заполнено'}
+    }
+    if (value.length > 50) {
+      return {invalidName: 'Больше 50 символов'}
+    }
+    return null
+  }
+  private validateDate(value: string) {
+    if (value === '') {
+      return {invalidDate: 'Поле не заполнено'}
+    }
+    if (value.length !== 10) {
+      return {invalidDate: 'Некорректная дата'}
+    }
+    const parsedDate = Date.parse(value.split('.').reverse().join('-'))
+    if (Date.now() > parsedDate) {
+      return {invalidDate: 'Дата уже прошла'}
+    }
+    if (isNaN(parsedDate)) {
+      return {invalidDate: 'Некорректная дата'}
+    }
+    return null
+  }
+  private validateTime(value: string) {
+    if (value === '') {
+      return {invalidTime: 'Не заполнено'}
+    }
+    if (value.length !== 5) {
+      return {invalidTime: 'Заполнено не верно'}
+    }
+    if (!value[0].match(/[0-2]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[0] === '2' && value[1] && !['0', '1', '2', '3'].includes(value[1])) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[1] && !value[1].match(/[0-9]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[2] && value[2] !== ':') {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[3] && !value[3].match(/[0-5]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[4] && !value[4].match(/[0-9]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    }
+    return null
+  }
+  private validateLocation(value: string) {
+    if (value === '') {
+      return {invalidLocation: 'Поле не заполнено'}
+    }
+    return null
   }
 
   addMeetupHandler() {

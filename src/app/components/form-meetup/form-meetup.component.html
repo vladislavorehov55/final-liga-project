@@ -8,6 +8,7 @@
       <input formControlName="name" class="input" name="name"
              (focus)="focusInputHandler($event)"
              (blur)="blurInputHandler($event)"
+             [ngClass]="{invalid: nameError}"
       >
     </div>
 
@@ -17,13 +18,16 @@
       <input formControlName="date" class="input" name="date"
              (focus)="focusInputHandler($event)"
              (blur)="blurInputHandler($event)"
+             [ngClass]="{invalid: dateError}"
       >
     </div>
 
     <label class="label time">Время</label>
     <div class="inputWrapTime inputWrap">
       <span class="errorMessage">{{timeError}}</span>
-      <input type="text" formControlName="time" class="input" name="time"
+      <input type="text" formControlName="time"
+             [ngClass]="{input: true, invalid: timeError}"
+             name="time"
              (focus)="focusInputHandler($event)"
              (blur)="blurInputHandler($event)"
       >
@@ -35,6 +39,7 @@
       <input type="text" formControlName="location" class="input" name="location"
              (focus)="focusInputHandler($event)"
              (blur)="blurInputHandler($event)"
+             [ngClass]="{invalid: locationError}"
       >
     </div>
 
