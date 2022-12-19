@@ -70,3 +70,6 @@
 .selectUserItem:hover {
   opacity: 0.5;
 }
+.input.ng-touched.ng-invalid{
+  border-color: red;
+}

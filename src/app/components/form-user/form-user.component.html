@@ -6,19 +6,31 @@
     <div class="block">
       <label>ФИО</label>
       <div class="inputWrap">
-        <input formControlName="fio" class="input">
+        <input formControlName="fio" class="input" name="fio"
+               (blur)="onBlurInputHandler($event)"
+               (focus)="onFocusHInputHandler($event)"
+        >
+        <span *ngIf="fioError">{{fioError}}</span>
       </div>
     </div>
     <div class="block">
       <label>Почта</label>
       <div class="inputWrap">
-        <input formControlName="email" class="input">
+        <input formControlName="email" class="input" name="email"
+               (blur)="onBlurInputHandler($event)"
+               (focus)="onFocusHInputHandler($event)"
+        >
+        <span *ngIf="emailError">{{emailError}}</span>
       </div>
     </div>
     <div class="block">
       <label>Пароль</label>
       <div class="inputWrap">
-        <input type="text" placeholder="****" formControlName="password" class="input">
+        <input type="password" placeholder="****" formControlName="password" class="input"
+               name="password" (blur)="onBlurInputHandler($event)"
+               (focus)="onFocusHInputHandler($event)"
+        >
+        <span *ngIf="passwordError">{{passwordError}}</span>
       </div>
     </div>
 

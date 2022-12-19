@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../user/user.service";
 
 interface IUserFormFields {
@@ -61,9 +61,15 @@ export class FormService {
       formFieldsValue = formFieldsValue as IUserFormFields
       this.userRole = userRole
       this.form = new FormGroup<IUserFormGroup>({
-        fio: new FormControl(formFieldsValue.fio),
-        email: new FormControl(formFieldsValue.email),
-        password: new FormControl(formFieldsValue.password)
+        fio: new FormControl(formFieldsValue.fio, {
+          validators: [Validators.required]
+        }),
+        email: new FormControl(formFieldsValue.email, {
+          validators: [Validators.required, Validators.email]
+        }),
+        password: new FormControl(formFieldsValue.password, {
+          validators: [Validators.required]
+        })
       })
     }
     else if (this.formType === 'MEETUP') {
