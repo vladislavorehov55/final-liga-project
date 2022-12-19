@@ -21,9 +21,12 @@
   height: 400px;
 }
 
+.closeBlock {
+  display: flex;
+  justify-content: flex-end;
+}
 .close {
   cursor: pointer;
-  text-align: end;
 }
 .title {
   text-align: center;

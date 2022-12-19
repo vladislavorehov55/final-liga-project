@@ -1,7 +1,9 @@
 <div class="modal" *ngIf="isShow">
   {{changeDetect}}
   <form [formGroup]="form" class="form">
-    <div class="close" (click)="closeFormHandler()">&times;</div>
+    <div class="closeBlock">
+      <span class="close" (click)="closeFormHandler()">&times;</span>
+    </div>
     <h2 class="title">{{title}}</h2>
     <div class="block">
       <label>ФИО</label>
@@ -10,8 +12,9 @@
                (blur)="onBlurInputHandler($event)"
                (focus)="onFocusHInputHandler($event)"
         >
-        <span *ngIf="fioError">{{fioError}}</span>
       </div>
+      <span *ngIf="fioError" class="errorMessage">{{fioError}}</span>
+
     </div>
     <div class="block">
       <label>Почта</label>
@@ -20,8 +23,9 @@
                (blur)="onBlurInputHandler($event)"
                (focus)="onFocusHInputHandler($event)"
         >
-        <span *ngIf="emailError">{{emailError}}</span>
       </div>
+      <span *ngIf="emailError" class="errorMessage">{{emailError}}</span>
+
     </div>
     <div class="block">
       <label>Пароль</label>
@@ -30,8 +34,8 @@
                name="password" (blur)="onBlurInputHandler($event)"
                (focus)="onFocusHInputHandler($event)"
         >
-        <span *ngIf="passwordError">{{passwordError}}</span>
       </div>
+      <span *ngIf="passwordError" class="errorMessage">{{passwordError}}</span>
     </div>
 
     <div class="roleBlock">
