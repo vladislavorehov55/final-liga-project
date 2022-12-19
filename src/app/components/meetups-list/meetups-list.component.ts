@@ -13,12 +13,22 @@ export class MeetupsListComponent implements OnInit, OnDestroy {
   constructor(private _meetupService: MeetupService, private _cdr: ChangeDetectorRef) {}
   private _meetupsSubscription!: Subscription
   currentMeetups: IMeetup[] = []
+  private _serverError: string = ''
+  get serverError() {
+    return this._serverError
+  }
   ngOnInit() {
     this._meetupService.getDataMeetups()
-    this._meetupsSubscription = this._meetupService.meetupsSubject.subscribe(items => {
-      console.log('subscribe', items)
-      this.currentMeetups = items
-      this._cdr.detectChanges()
+    this._meetupsSubscription = this._meetupService.meetupsSubject.subscribe({
+      next: (items) => {
+        console.log('subscribe', items)
+        this.currentMeetups = items
+        this._cdr.detectChanges()
+      },
+      error: (err) => {
+        this._serverError = err
+        this._cdr.detectChanges()
+      }
     })
   }
   ngOnDestroy() {

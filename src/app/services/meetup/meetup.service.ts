@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {IMeetup, IMeetupResponse, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, concatAll, map, Subscription, toArray} from "rxjs";
+import {BehaviorSubject, catchError, throwError, concatAll, map, toArray} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
@@ -22,7 +22,6 @@ export class MeetupService {
     return this._meetups
   }
   meetupsSubject = new BehaviorSubject<IMeetup[]>([])
-  meetupsObservable = this.meetupsSubject.asObservable()
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
   private _getMeetupStatus(meetupTime: string, duration: number): MeetupStatusEnum {
@@ -41,8 +40,9 @@ export class MeetupService {
   }
 
   getDataMeetups() {
-    this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
+    this.http.get<IMeetupResponse[]>(`${this._baseURL}//meetup`)
       .pipe(
+        catchError(err => throwError(err)),
         concatAll(),
         map((meetup:IMeetupResponse) => {
           const newMeetup: IMeetup = {
@@ -55,12 +55,18 @@ export class MeetupService {
         }),
         toArray()
       )
-      .subscribe((data: IMeetup[]) => {
-        this._meetups = data
-        this.meetupsSubject.next(this.meetups)
+      .subscribe({
+        next: (data: IMeetup[]) => {
+          this._meetups = data
+          this.meetupsSubject.next(this.meetups)
+        },
+        error: (err) => {
+          console.log('err',err)
+          this.meetupsSubject.error(err.message)
+        }
       })
-  }
 
+  }
   setMeetupOpened(id: number) {
     const meetups = this.meetups.map(meetup => {
       if (meetup.id === id) {
