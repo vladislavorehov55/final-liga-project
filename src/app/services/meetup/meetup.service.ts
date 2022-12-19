@@ -14,6 +14,7 @@ export class MeetupService {
   private _baseURL: string = `${this.environmentService.environment.apiUrl}`
   private _meetups: Array<IMeetup> = []
   editedMeetupID: number | null = null
+
   get meetups() {
     console.log('all meetups', this._meetups)
     if (this._router.url === '/my-meetups') {
@@ -21,36 +22,38 @@ export class MeetupService {
     }
     return this._meetups
   }
+
   meetupsSubject = new BehaviorSubject<IMeetup[]>([])
+
   constructor(private environmentService: EnvironmentService, private http: HttpClient, private _router: Router, private _authService: AuthService) {
   }
+
   private _getMeetupStatus(meetupTime: string, duration: number): MeetupStatusEnum {
     const meetupStart = Date.parse(meetupTime)
     const meetupEnd = meetupStart + duration * 60000
     const currentDate = Date.now()
     if (currentDate > meetupEnd) {
       return MeetupStatusEnum.CONDUCTED
-    }
-    else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
+    } else if (meetupStart <= currentDate && currentDate <= meetupEnd) {
       return MeetupStatusEnum.IN_PROGRESS
-    }
-    else {
+    } else {
       return MeetupStatusEnum.PLANNED
     }
   }
 
-  // Errror
+  // Error
   private _meetupsErrorSubject = new BehaviorSubject<string>('')
   get meetupsErrorSubject() {
     return this._meetupsErrorSubject
   }
+
   ///
   getDataMeetups() {
     this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
       .pipe(
         catchError(err => throwError(err)),
         concatAll(),
-        map((meetup:IMeetupResponse) => {
+        map((meetup: IMeetupResponse) => {
           const newMeetup: IMeetup = {
             ...meetup,
             status: this._getMeetupStatus(meetup.time, meetup.duration),
@@ -67,13 +70,13 @@ export class MeetupService {
           this.meetupsSubject.next(this.meetups)
         },
         error: (err) => {
-          console.log('er1r',err)
+          console.log('er1r', err)
           this._meetupsErrorSubject.next('Произошла критическая ошибка')
-          // this.meetupsSubject.error(err.message)
         }
       })
 
   }
+
   setMeetupOpened(id: number) {
     const meetups = this.meetups.map(meetup => {
       if (meetup.id === id) {
@@ -88,6 +91,7 @@ export class MeetupService {
   subscribe(idMeetup: number, idUser: number) {
     this.http.put<IMeetupResponse>(`${this._baseURL}/meetup`, {idMeetup, idUser})
       .pipe(
+        catchError(err => throwError(err)),
         map((meetup) => {
           const user: IParsedToken = this._authService.user as IParsedToken
           const currentMeetups = this.meetups
@@ -105,10 +109,16 @@ export class MeetupService {
           return currentMeetups
         })
       )
-      .subscribe((data) => {
-        this._meetups = data
-        this.meetupsSubject.next(data)
+      .subscribe({
+        next: (data) => {
+          this._meetups = data
+          this.meetupsSubject.next(data)
+        },
+        error: err => {
+          this._meetupsErrorSubject.next('Произошла ошибка! Пожалуйста перезагрузите страницу')
+        }
       })
+
   }
 
   unsubscribe(idMeetup: number, idUser: number) {
@@ -116,6 +126,7 @@ export class MeetupService {
       body: {idMeetup, idUser}
     })
       .pipe(
+        catchError(err => throwError(err)),
         map((meetup) => {
           const user: IParsedToken = this._authService.user as IParsedToken
           const currentMeetups = this.meetups
@@ -133,9 +144,14 @@ export class MeetupService {
           return currentMeetups
         })
       )
-      .subscribe((data: IMeetup[]) => {
-        this._meetups = data
-        this.meetupsSubject.next(data)
+      .subscribe({
+        next: (data: IMeetup[]) => {
+          this._meetups = data
+          this.meetupsSubject.next(data)
+        },
+        error: (err) => {
+          this._meetupsErrorSubject.next('Произошла ошибка! Пожалуйста перезагрузите страницу')
+        }
       })
   }
 
@@ -191,7 +207,13 @@ export class MeetupService {
         meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
         meetup.need_to_know?.toLowerCase().includes(value) || meetup.reason_to_come?.toLowerCase().includes(value) ||
         (meetup.time ? new Date(meetup.time).toLocaleDateString('ru',
-          {day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit'}).includes(value) : null)
+          {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          }).includes(value) : null)
     })
     this.meetupsSubject.next(searchedMeetups)
   }

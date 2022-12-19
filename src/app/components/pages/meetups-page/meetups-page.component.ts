@@ -12,7 +12,8 @@ import {Subscription} from "rxjs";
 export class MeetupsPageComponent implements OnInit, OnDestroy{
   constructor(private _formService: FormService,
               private _meetupsService: MeetupService,
-              private _cdr: ChangeDetectorRef) {
+              private _cdr: ChangeDetectorRef
+  ) {
   }
   private _errorSubscription = new Subscription()
   private _serverError: string = ''
