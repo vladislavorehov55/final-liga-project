@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {UserService} from "../user/user.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 
 interface IUserFormFields {
   fio: string
@@ -52,6 +52,8 @@ export class FormService {
   formMethodType: string = ''
   userRole: string = ''
 
+
+
   form!: FormGroup
 
   constructor(private _userService: UserService) {
@@ -79,12 +81,44 @@ export class FormService {
     }
   }
 
-  private subscribeInput(value: string, name: string) {
-    if (value === '') {
-      this.form.controls[name].reset()
-    }
+
+  private _emailError: string = ''
+  private _fioError: string = ''
+  private _passwordError: string = ''
+
+  get emailError() {
+    return this._emailError
+  }
+  set emailError(email) {
+    this._emailError = email
+  }
+  get fioError() {
+    return this._fioError
+  }
+  set fioError(value) {
+    this._fioError = value
+  }
+  get passwordError() {
+    return this._passwordError
+  }
+  set passwordError(value) {
+    this._passwordError = value
   }
 
+
+  private _subscriptionFioField:Subscription = new Subscription()
+  get subscriptionFioField() {
+    return this._subscriptionFioField
+  }
+  private _subscriptionEmailField = new Subscription()
+  get subscriptionEmailField() {
+    return this._subscriptionEmailField
+  }
+
+  private _subscriptionPasswordField = new Subscription()
+  get subscriptionPasswordField() {
+    return this._subscriptionPasswordField
+  }
   setForm(formType: string, formMethodType: string, title: string, userRole: string, formFieldsValue: IUserFormFields | IMeetupFormFields) {
     this.formType = formType
     this.formMethodType = formMethodType
@@ -102,6 +136,49 @@ export class FormService {
         password: new FormControl(formFieldsValue.password, {
           validators: [Validators.required]
         })
+      })
+      this._subscriptionFioField = this.form.controls['fio'].valueChanges.subscribe((value) => {
+        const {errors, untouched, invalid} = this.form.controls['fio']
+        if (!invalid) {
+          this._fioError = ''
+        }
+        if (!untouched && invalid) {
+          if (errors) {
+            if (errors['required']) {
+              this._fioError = 'Поле не заполнено'
+            }
+          }
+        }
+      })
+
+      this._subscriptionEmailField = this.form.controls['email'].valueChanges.subscribe((value) => {
+        const {errors, untouched, invalid} = this.form.controls['email']
+        if (!invalid) {
+          this._emailError = ''
+        }
+        if (!untouched && invalid) {
+          if (errors) {
+            if (errors['required']) {
+              this._emailError = 'Поле не заполнение'
+            }
+            else if (errors['email'] ) {
+              this._emailError = 'Некорректное поле'
+            }
+          }
+        }
+      })
+      this._subscriptionPasswordField = this.form.controls['password'].valueChanges.subscribe((value) => {
+        const {errors, untouched, invalid} = this.form.controls['password']
+        if (!invalid) {
+          this._fioError = ''
+        }
+        if (!untouched && invalid) {
+          if (errors) {
+            if (errors['required']) {
+              this._passwordError = 'Поле не заполнено'
+            }
+          }
+        }
       })
     } else if (this.formType === 'MEETUP') {
       formFieldsValue = formFieldsValue as IMeetupFormFields

@@ -19,13 +19,10 @@ import {Subscription} from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy {
-  private _fioError: string = ''
-  private _emailError: string = ''
-  private _passwordError: string = ''
+
   private _isShow: boolean = false
   private _userRoleInit = ''
   private _isShowSubscription!: Subscription
-
   constructor(private _formService: FormService, private _roleService: RoleService,
               private _userService: UserService, private _cdr: ChangeDetectorRef) {
   }
@@ -49,6 +46,10 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
 
   ngOnDestroy() {
     this._isShowSubscription.unsubscribe()
+    this._formService.subscriptionFioField.unsubscribe()
+    this._formService.subscriptionEmailField.unsubscribe()
+    this._formService.subscriptionPasswordField.unsubscribe()
+    console.log('Destroy form user')
   }
 
   get roles() {
@@ -73,9 +74,9 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   closeFormHandler() {
-    this._fioError = ''
-    this._emailError = ''
-    this._passwordError = ''
+    this._formService.fioError = ''
+    this._formService.emailError = ''
+    this._formService.passwordError = ''
     this._formService.closeForm()
   }
 
@@ -113,15 +114,15 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
 
 
   get fioError() {
-    return this._fioError
+    return this._formService.fioError
   }
 
   get emailError() {
-    return this._emailError
+    return this._formService.emailError
   }
 
   get passwordError() {
-    return this._passwordError
+    return this._formService.passwordError
   }
 
   onBlurInputHandler(e: any) {
@@ -129,23 +130,23 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
     switch (name) {
       case 'fio':
         if (this.form.controls[name].errors) {
-          this._fioError = 'Поле не заполнено'
+          this._formService.fioError = 'Поле не заполнено'
         }
         break
       case 'email':
         const error = this.form.controls[name].errors
         if (error) {
           if (error['required']) {
-            this._emailError = 'Поле не заполнено'
+            this._formService.emailError = 'Поле не заполнено'
           } else if (error['email']) {
-            this._emailError = 'Некорректный'
+            this._formService.emailError = 'Некорректное поле'
           }
         }
         break
       case 'password':
 
         if (this.form.controls[name].errors) {
-          this._passwordError = 'Поле не заполнено'
+          this._formService.passwordError = 'Поле не заполнено'
         }
         break
     }
@@ -155,19 +156,19 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
     const {name} = e.target
     switch (name) {
       case 'fio':
-        this._fioError = ''
+        this._formService.fioError = ''
         if (this.form.controls[name].invalid) {
           this.form.controls[name].reset()
         }
         break
       case 'email':
-        this._emailError = ''
+        this._formService.emailError = ''
         if (this.form.controls[name].invalid) {
           this.form.controls[name].reset()
         }
         break
       case 'password':
-        this._passwordError = ''
+        this._formService.passwordError = ''
         if (this.form.controls[name].invalid) {
           this.form.controls[name].reset()
         }
