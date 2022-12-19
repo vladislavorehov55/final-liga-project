@@ -4,23 +4,38 @@
     <h2 class="title">{{title}}</h2>
     <label class="label name">Название</label>
     <div class="inputWrapName inputWrap">
-      <input formControlName="name" class="input">
+      <span class="errorMessage">{{nameError}}</span>
+      <input formControlName="name" class="input" name="name"
+             (focus)="focusInputHandler($event)"
+             (blur)="blurInputHandler($event)"
+      >
     </div>
 
     <label class="label date">Дата</label>
     <div class="inputWrapDate inputWrap">
-      <input formControlName="date" class="input">
+      <span class="errorMessage">{{dateError}}</span>
+      <input formControlName="date" class="input" name="date"
+             (focus)="focusInputHandler($event)"
+             (blur)="blurInputHandler($event)"
+      >
     </div>
 
     <label class="label time">Время</label>
     <div class="inputWrapTime inputWrap">
-      <input type="text" formControlName="time" class="input">
+      <span class="errorMessage">{{timeError}}</span>
+      <input type="text" formControlName="time" class="input" name="time"
+             (focus)="focusInputHandler($event)"
+             (blur)="blurInputHandler($event)"
+      >
     </div>
 
     <label class="label place">Место</label>
     <div class="inputWrapPlace inputWrap">
-      <input type="text" formControlName="location" class="input">
-
+      <span class="errorMessage">{{locationError}}</span>
+      <input type="text" formControlName="location" class="input" name="location"
+             (focus)="focusInputHandler($event)"
+             (blur)="blurInputHandler($event)"
+      >
     </div>
 
     <label class="label description">Описание</label>

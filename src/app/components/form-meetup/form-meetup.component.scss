@@ -134,3 +134,6 @@
 .label {
   align-self: center;
 }
+.input.ng-touched.ng-invalid{
+  border-color: red;
+}

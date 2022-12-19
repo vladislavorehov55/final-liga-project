@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Injectable} from '@angular/core';
+import {FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {UserService} from "../user/user.service";
 import {BehaviorSubject} from "rxjs";
 
@@ -8,11 +8,13 @@ interface IUserFormFields {
   email: string
   password: string
 }
+
 interface IUserFormGroup {
   fio: FormControl<string | null>
   email: FormControl<string | null>
   password: FormControl<string | null>
 }
+
 interface IMeetupFormFields {
   name: string
   description: string
@@ -25,6 +27,7 @@ interface IMeetupFormFields {
   will_happen: string,
   reason_to_come: string
 }
+
 interface IMeetupFormGroup {
   name: FormControl<string | null>
   description: FormControl<string | null>
@@ -66,6 +69,7 @@ export class FormService {
         break
     }
   }
+
   closeForm() {
     switch (this.formType) {
       case 'USER':
@@ -77,7 +81,13 @@ export class FormService {
     }
   }
 
-  setForm(formType: string, formMethodType: string, title: string, userRole: string, formFieldsValue: IUserFormFields | IMeetupFormFields ) {
+  private subscribeInput(value: string, name: string) {
+    if (value === '') {
+      this.form.controls[name].reset()
+    }
+  }
+
+  setForm(formType: string, formMethodType: string, title: string, userRole: string, formFieldsValue: IUserFormFields | IMeetupFormFields) {
     this.formType = formType
     this.formMethodType = formMethodType
     this.title = title
@@ -95,23 +105,150 @@ export class FormService {
           validators: [Validators.required]
         })
       })
-    }
-    else if (this.formType === 'MEETUP') {
+    } else if (this.formType === 'MEETUP') {
       formFieldsValue = formFieldsValue as IMeetupFormFields
       this.form = new FormGroup<IMeetupFormGroup>({
-        name: new FormControl(formFieldsValue.name),
-        date: new FormControl(formFieldsValue.date),
-        time: new FormControl(formFieldsValue.time),
-        location: new FormControl(formFieldsValue.location),
-        description: new FormControl(formFieldsValue.description),
-        target_audience: new FormControl(formFieldsValue.target_audience),
-        need_to_know: new FormControl(formFieldsValue.need_to_know),
-        will_happen: new FormControl(formFieldsValue.will_happen),
-        duration: new FormControl(formFieldsValue.duration),
-        reason_to_come: new FormControl(formFieldsValue.reason_to_come)
+        name: new FormControl(formFieldsValue.name, {
+          validators: [Validators.required, Validators.maxLength(50)]
+        }),
+        date: new FormControl(formFieldsValue.date, {
+          validators: [
+            Validators.required,
+            // Validators.minLength(10),
+            // Validators.maxLength(10),
+            this.dateValidator
+          ]
+        }),
+        time: new FormControl(formFieldsValue.time, {
+          validators: [Validators.required, this.timeValidator]
+        }),
+        location: new FormControl(formFieldsValue.location, {
+          validators: [Validators.required]
+        }),
+        description: new FormControl(formFieldsValue.description, {
+          validators: []
+        }),
+        target_audience: new FormControl(formFieldsValue.target_audience, {
+          validators: []
+        }),
+        need_to_know: new FormControl(formFieldsValue.need_to_know, {
+          validators: []
+        }),
+        will_happen: new FormControl(formFieldsValue.will_happen, {
+          validators: []
+        }),
+        duration: new FormControl(formFieldsValue.duration, {
+          validators: [Validators.max(120)]
+        }),
+        reason_to_come: new FormControl(formFieldsValue.reason_to_come, {
+          validators: [Validators.maxLength(30)]
+        })
+      })
+      this.form.get('name')?.valueChanges.subscribe(value => {
+        console.log('Evaluate')
+        this.subscribeInput(value, 'name')
+      })
+      this.form.get('date')?.valueChanges.subscribe((value => {
+        this.subscribeInput(value, 'date')
+      }))
+
+
+      this.form.get('time')?.valueChanges.subscribe(value => {
+        console.log('value2', value)
+        const control = this.form.controls['time']
+        console.log('error', control)
+        if (value === '') {
+          control.reset()
+        } else if (control.untouched === false && control.errors) {
+          this._timeError = control.errors['required'] ? control.errors['required'] : control.errors['invalidTime']
+        }
+
+        // if (value === '') {
+        //   this.form.controls['time'].reset()
+        // }
+        // else {
+        //   const {errors} = this.form.controls['time']
+        //   if (errors) {
+        //     if (errors['required']) {
+        //       this._timeError = 'Не заполнено'
+        //     }
+        //     else if (errors['invalidTime']) {
+        //       this._timeError = errors['invalidTime']
+        //     }
+        //   }
+        // }
+      })
+
+
+      this.form.get('location')?.valueChanges.subscribe(value => {
+        this.subscribeInput(value, 'location')
       })
     }
-
   }
 
+  _nameError: string = ''
+  _dateError: string = ''
+  _timeError: string = ''
+  _locationError: string = ''
+
+  get nameError() {
+    return this._nameError
+  }
+
+  get dateError() {
+    return this._dateError
+  }
+
+  get timeError() {
+    return this._timeError
+  }
+
+  get locationError() {
+    return this._locationError
+  }
+
+
+  private timeValidator(control: FormControl): ValidationErrors | null {
+    const value: string = control.value
+    console.log('value', value)
+    if (!Boolean(value)) {
+      return {invalidTime: true}
+    }
+    if (value.length !== 5) {
+      return {invalidTime: 'Заполнено не верно'}
+    }
+    if (!value[0].match(/[0-2]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[0] === '2' && value[1] && !['0', '1', '2', '3'].includes(value[1])) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[1] && !value[1].match(/[0-9]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[2] && value[2] !== ':') {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[3] && !value[3].match(/[0-5]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    } else if (value[4] && !value[4].match(/[0-9]/)) {
+      return {invalidTime: 'Заполнено не верно'}
+    }
+    return null
+  }
+
+  private dateValidator(control: FormControl): ValidationErrors | null {
+    const value: string = control.value
+    if (value === '') {
+      return null
+    }
+    if (value.length !== 10) {
+      return {invalidDate: 'Некорректная дата'}
+    }
+    const parsedDate = Date.parse(value.split('.').reverse().join('-'))
+    if (Date.now() > parsedDate) {
+      return {invalidDate: 'Дата уже прошла'}
+    }
+    if (isNaN(parsedDate)) {
+      return {invalidDate: 'Некорректная дата'}
+    }
+
+    return null
+  }
 }
