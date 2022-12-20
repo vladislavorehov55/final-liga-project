@@ -1,11 +1,11 @@
 <form [formGroup]="form" class="form">
     <div class="inputWrap searchInputWrap">
-      <input formControlName="searchValue" class="input searchInput">
+      <input formControlName="searchedValue" class="input searchInput">
       <app-svg-generator type="icon-search" (click)="search(searchedValue)"></app-svg-generator>
     </div>
   <div class="selectUserRoleGroup">
-    <label>Роль</label>
-    <select class="selectUserRoleWrap input" formControlName="selectedUserRole">
+    <label>{{label}}</label>
+    <select class="selectUserRoleWrap input" formControlName="selectedValue">
       <option class="option" [ngValue]="''">не выбрано</option>
       <option class="option" *ngFor="let option of options" [ngValue]="option">
         {{option}}

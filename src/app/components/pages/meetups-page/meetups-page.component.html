@@ -1,6 +1,6 @@
 <div class="page">
   <ng-container *ngIf="serverError === ''; else elseBlock">
-    <app-search></app-search>
+    <app-search label="Дата" [options]="['ближайшая', 'дальняя']"></app-search>
     <div class="btnCreateWrap">
       <button class="btnCreate" (click)="openFormHandler()">Создать митап</button>
     </div>

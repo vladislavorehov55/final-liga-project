@@ -1,6 +1,6 @@
 <div class="page">
   <ng-container *ngIf="serverError === ''; else elseBlock ">
-    <app-search [options]="roles">
+    <app-search label="Роль" [options]="roles">
     </app-search>
     <div class="btnCreateWrap">
       <button class="btnCreate" (click)="openUserCreationForm()">Создать пользователя</button>

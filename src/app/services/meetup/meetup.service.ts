@@ -248,27 +248,75 @@ export class MeetupService {
       })
   }
   private _searchedMeetups: IMeetup[] | null = null
-  searchMeetups(value: string) {
-    if (value === '') {
-      // this.meetupsSubject.next(this.meetups)
+  searchMeetups(value: string, selectedSortDateType: string) {
+    if (value === '' && selectedSortDateType === '') {
       this._searchedMeetups = null
       this.setMeetupsOnPage(1)
       return
     }
-    this._searchedMeetups = this.meetups.filter(meetup => {
-      return meetup.name?.toLowerCase().includes(value) || meetup.description?.includes(value) ||
-        meetup.location?.toLowerCase().includes(value) || (meetup.duration || null) === +value ||
-        meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
-        meetup.need_to_know?.toLowerCase().includes(value) || meetup.reason_to_come?.toLowerCase().includes(value) ||
-        (meetup.time ? new Date(meetup.time).toLocaleDateString('ru',
-          {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-          }).includes(value) : null)
-    })
+    else if (value === '' && selectedSortDateType) {
+      this._searchedMeetups = this.meetups.sort((a,b) => {
+        const first: number = Date.parse(a.time)
+        const second: number = Date.parse(b.time)
+        return selectedSortDateType === 'ближайшая' ? first - second : second - first
+      })
+    }
+    else if (value && selectedSortDateType == '') {
+      this._searchedMeetups = this.meetups.filter(meetup => {
+        return meetup.name?.toLowerCase().includes(value) || meetup.description?.includes(value) ||
+          meetup.location?.toLowerCase().includes(value) || (meetup.duration || null) === +value ||
+          meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
+          meetup.need_to_know?.toLowerCase().includes(value) || meetup.reason_to_come?.toLowerCase().includes(value) ||
+          (meetup.time ? new Date(meetup.time).toLocaleDateString('ru',
+            {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            }).includes(value) : null)
+      })
+    }
+    else if (value && selectedSortDateType) {
+      this._searchedMeetups = this.meetups.filter(meetup => {
+        return meetup.name?.toLowerCase().includes(value) || meetup.description?.includes(value) ||
+          meetup.location?.toLowerCase().includes(value) || (meetup.duration || null) === +value ||
+          meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
+          meetup.need_to_know?.toLowerCase().includes(value) || meetup.reason_to_come?.toLowerCase().includes(value) ||
+          (meetup.time ? new Date(meetup.time).toLocaleDateString('ru',
+            {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            }).includes(value) : null)
+      }).sort((a,b) => {
+        const first = Date.parse(a.time)
+        const second = Date.parse(b.time)
+        return selectedSortDateType === 'ближайшая' ? first - second : second - first
+      })
+    }
+    // if (value === '') {
+    //   // this.meetupsSubject.next(this.meetups)
+    //   this._searchedMeetups = null
+    //   this.setMeetupsOnPage(1)
+    //   return
+    // }
+    // this._searchedMeetups = this.meetups.filter(meetup => {
+    //   return meetup.name?.toLowerCase().includes(value) || meetup.description?.includes(value) ||
+    //     meetup.location?.toLowerCase().includes(value) || (meetup.duration || null) === +value ||
+    //     meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
+    //     meetup.need_to_know?.toLowerCase().includes(value) || meetup.reason_to_come?.toLowerCase().includes(value) ||
+    //     (meetup.time ? new Date(meetup.time).toLocaleDateString('ru',
+    //       {
+    //         day: '2-digit',
+    //         month: '2-digit',
+    //         year: '2-digit',
+    //         hour: '2-digit',
+    //         minute: '2-digit'
+    //       }).includes(value) : null)
+    // })
     this.setMeetupsOnPage(1)
     // this.meetupsSubject.next(searchedMeetups)
   }
