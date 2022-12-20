@@ -30,8 +30,7 @@ export class UsersPageComponent implements OnInit, OnDestroy{
     return this._userService.itemOnPage
   }
   get totalUsers() {
-    console.log('all users', this._userService.users)
-    return this._userService.users.length
+    return this._userService.currentUsersAllCount
   }
   get currentPageNumber() {
     return this._userService.currentPageNumber
@@ -71,6 +70,9 @@ export class UsersPageComponent implements OnInit, OnDestroy{
 
   changePageHandler(newPage: number) {
     this._userService.setUsersOnPage(newPage)
+  }
+  searchUserHandler(value: string) {
+    this._userService.searchUser(value.toLowerCase())
   }
 
 }

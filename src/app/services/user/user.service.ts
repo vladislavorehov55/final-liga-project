@@ -173,7 +173,26 @@ export class UserService {
     const start = (newPageNumber - 1) * this._itemsOnPage;
     const end = start + this._itemsOnPage;
     this._currentPageNumber = newPageNumber
-    this.usersSubject.next(this._users.slice(start, end))
+    const currentUsers = this._searchedUsers ? this._searchedUsers : this.users
+    this.usersSubject.next(currentUsers.slice(start, end))
+  }
+  private _searchedUsers: IUserGetResponse[] | null = null
+  get currentUsersAllCount() {
+    return this._searchedUsers ? this._searchedUsers.length : this._users.length
+  }
+  searchUser(value: string) {
+    if (value === '') {
+      this._searchedUsers = null
+      this.setUsersOnPage(1)
+      return
+    }
+    this._searchedUsers = this._users.filter(user => {
+      return user.fio.toLowerCase().includes(value)
+        || user.email.toLowerCase().includes(value) ||
+        user.roles.filter(role => role.name.toLowerCase().includes(value)).length
+    })
+    console.log('search', this._searchedUsers)
+    this.setUsersOnPage(1)
   }
 
 }
