@@ -180,17 +180,38 @@ export class UserService {
   get currentUsersAllCount() {
     return this._searchedUsers ? this._searchedUsers.length : this._users.length
   }
-  searchUser(value: string) {
-    if (value === '') {
+  searchUser(value: string, selectedUserRole: string) {
+    if (value === '' && selectedUserRole === '') {
       this._searchedUsers = null
       this.setUsersOnPage(1)
       return
     }
-    this._searchedUsers = this._users.filter(user => {
-      return user.fio.toLowerCase().includes(value)
-        || user.email.toLowerCase().includes(value) ||
-        user.roles.filter(role => role.name.toLowerCase().includes(value)).length
-    })
+    else if (value === '' && selectedUserRole) {
+      this._searchedUsers = this.users.filter(user => {
+        return user.roles.filter(role => role.name.toLowerCase() === selectedUserRole).length
+      })
+    }
+    else if (value && selectedUserRole === '') {
+      this._searchedUsers = this.users.filter(user => {
+        return user.fio.toLowerCase().includes(value) ||  user.email.toLowerCase().includes(value)
+      })
+    }
+    else if (value && selectedUserRole) {
+      this._searchedUsers = this.users.filter(user => {
+        return (user.fio.toLowerCase().includes(value) || user.email.toLowerCase().includes(value))
+          && user.roles.filter(role => role.name.toLowerCase() === selectedUserRole).length
+      })
+    }
+    // if (value === '') {
+    //   this._searchedUsers = null
+    //   this.setUsersOnPage(1)
+    //   return
+    // }
+    // this._searchedUsers = this._users.filter(user => {
+    //   return user.fio.toLowerCase().includes(value)
+    //     || user.email.toLowerCase().includes(value) ||
+    //     user.roles.filter(role => role.name.toLowerCase() === selectedUserRole).length
+    // })
     console.log('search', this._searchedUsers)
     this.setUsersOnPage(1)
   }

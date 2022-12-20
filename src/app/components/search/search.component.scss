@@ -1,3 +1,4 @@
+@import "../../scss-var/variables";
 .form {
   margin-bottom: 10px;
 }
@@ -13,3 +14,17 @@
   border-radius: 5px;
   border: 3px solid #4C3F78;
 }
+
+.selectUserRoleGroup {
+  color: #E9E9E9;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.selectUserRoleWrap {
+  flex-basis: 20%;
+}
+.option {
+  background: $bg-dark;
+}
+

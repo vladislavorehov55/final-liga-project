@@ -3,6 +3,8 @@ import {FormService} from "../../../services/form/form.service";
 import {UserService} from "../../../services/user/user.service";
 import {Subscription} from "rxjs";
 import {IUserGetResponse} from "../../../models/user";
+import {RoleService} from "../../../services/role/role.service";
+import {IRole} from "../../../models/role";
 
 @Component({
   selector: 'app-users-page',
@@ -18,7 +20,8 @@ export class UsersPageComponent implements OnInit, OnDestroy{
 
   constructor(private _formService: FormService,
               private _userService: UserService,
-              private _cdr: ChangeDetectorRef) {
+              private _cdr: ChangeDetectorRef,
+              private _roleService: RoleService) {
   }
   get serverError() {
     return this._serverError
@@ -35,8 +38,14 @@ export class UsersPageComponent implements OnInit, OnDestroy{
   get currentPageNumber() {
     return this._userService.currentPageNumber
   }
+
+  get roles() {
+    return this._roleService.roles.map((role) => role.name)
+  }
+
   ngOnInit() {
     console.log('init users page')
+    this._roleService.getDataRoles()
     this._userService.setUsersData()
     this._errorSubscription = this._userService.usersErrorSubject.subscribe({
       error: (err) => {
@@ -71,8 +80,4 @@ export class UsersPageComponent implements OnInit, OnDestroy{
   changePageHandler(newPage: number) {
     this._userService.setUsersOnPage(newPage)
   }
-  searchUserHandler(value: string) {
-    this._userService.searchUser(value.toLowerCase())
-  }
-
 }

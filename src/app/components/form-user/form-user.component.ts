@@ -37,7 +37,7 @@ export class FormUserComponent implements OnInit, AfterContentChecked, OnDestroy
   }
 
   ngOnInit() {
-    this._roleService.getDataRoles()
+    // this._roleService.getDataRoles()
     this._isShowSubscription = this._formService.isShowUserForm.subscribe(isShow => {
       this._isShow = isShow
       this._cdr.detectChanges()
