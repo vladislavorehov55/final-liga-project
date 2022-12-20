@@ -56,9 +56,17 @@ export class UserService {
               userId: parsedToken.id,
               names: [userRole]
             }
-            this._http.post(`${this._baseURL}/user/role`, body)
-              .subscribe(data => {
-                this.getUsersData()
+            this._http.post(`${this._baseURL}/.user/role`, body)
+              .pipe(
+                catchError(err => throwError('Произошла ошибка! Пользователь создан, но ему не присвоена нужная роль. Перезагрузите страницу.'))
+              )
+              .subscribe({
+                next: (data) => {
+                  this.getUsersData()
+                },
+                error: (err) => {
+                  this._usersErrorSubject.error(err)
+                }
               })
           } else {
             this.getUsersData()
@@ -102,8 +110,16 @@ export class UserService {
               names: [userRole]
             }
             this._http.post(`${this._baseURL}/user/role`, body)
-              .subscribe(data => {
-                this.getUsersData()
+              .pipe(
+                catchError(err => throwError('Произошла ошибка! Изменить роль не удалось. Перезагрузите страницу.'))
+              )
+              .subscribe({
+                next: data => {
+                  this.getUsersData()
+                },
+                error: (err) => {
+                  this._usersErrorSubject.error(err)
+                }
               })
           } else {
             this.getUsersData()
