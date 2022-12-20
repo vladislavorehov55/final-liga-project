@@ -57,7 +57,7 @@ export class UserService {
           this._intervalSubscription.unsubscribe()
           this.setUsersOnPage(1)
           // this.usersSubject.next(users)
-          this.startInterval()
+          // this.startInterval()
 
         },
         error: err => {
@@ -162,17 +162,16 @@ export class UserService {
       })
   }
   private _itemsOnPage = 5
-  setUsersOnPage(newPage: number) {
-    const pagesCount = Math.ceil(this._users.length / this._itemsOnPage)
-    if (newPage === 0 || newPage === pagesCount) {
-      console.log('Last')
-      return
-    }
-    const start = (newPage - 1) * this._itemsOnPage;
+  get itemOnPage() {
+    return this._itemsOnPage
+  }
+  private _currentPageNumber: number = 1
+  get currentPageNumber() {
+    return this._currentPageNumber
+  }
+  setUsersOnPage(newPageNumber: number) {
+    const start = (newPageNumber - 1) * this._itemsOnPage;
     const end = start + this._itemsOnPage;
-    console.log('start', start)
-    console.log('end', end)
-
     this.usersSubject.next(this._users.slice(start, end))
   }
 

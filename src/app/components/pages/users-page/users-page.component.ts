@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy
 import {FormService} from "../../../services/form/form.service";
 import {UserService} from "../../../services/user/user.service";
 import {Subscription} from "rxjs";
+import {IUserGetResponse} from "../../../models/user";
 
 @Component({
   selector: 'app-users-page',
@@ -12,6 +13,8 @@ import {Subscription} from "rxjs";
 export class UsersPageComponent implements OnInit, OnDestroy{
   private _serverError: string = ''
   private _errorSubscription = new Subscription()
+  private _users!: IUserGetResponse[]
+  private usersSubscription!: Subscription
 
   constructor(private _formService: FormService,
               private _userService: UserService,
@@ -19,6 +22,19 @@ export class UsersPageComponent implements OnInit, OnDestroy{
   }
   get serverError() {
     return this._serverError
+  }
+  get users() {
+    return this._users
+  }
+  get itemsOnPage() {
+    return this._userService.itemOnPage
+  }
+  get totalUsers() {
+    console.log('all users', this._userService.users)
+    return this._userService.users.length
+  }
+  get currentPageNumber() {
+    return this._userService.currentPageNumber
   }
   ngOnInit() {
     console.log('init users page')
@@ -30,10 +46,18 @@ export class UsersPageComponent implements OnInit, OnDestroy{
         this._cdr.detectChanges()
       },
     })
+    this.usersSubscription = this._userService.usersSubject.subscribe((items) => {
+      console.log('item', items)
+      this._users = items
+      this._cdr.detectChanges()
+    })
+
   }
   ngOnDestroy() {
     console.log('Destroy users page')
     this._errorSubscription.unsubscribe()
+    this.usersSubscription.unsubscribe()
+    this._userService.intervalSubscription.unsubscribe()
   }
 
   openUserCreationForm() {

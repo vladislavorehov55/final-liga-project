@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px;
+}
+.btn {
+  cursor: pointer;
+}
