@@ -16,7 +16,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._userService.getUsersData()
     this.usersSubscription = this._userService.usersSubject.subscribe((items) => {
       console.log('item', items)
       this._users = items
@@ -29,6 +28,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('users list destroy')
     this.usersSubscription.unsubscribe()
+    this._userService.intervalSubscription.unsubscribe()
   }
 }

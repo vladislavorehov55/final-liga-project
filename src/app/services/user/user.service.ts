@@ -4,14 +4,14 @@ import {EnvironmentService} from "../environment/environment.service";
 import {IUser, IUserDeleteResponse, IUserGetResponse} from "../../models/user";
 import {AuthService} from "../auth/auth.service";
 import {IParsedToken} from "../../models/parsedTokem";
-import {BehaviorSubject, catchError, throwError} from "rxjs";
+import {BehaviorSubject, catchError, interval, mergeMap, Subscription, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private _baseURL: string = `${this._environmentService.environment.apiUrl}`
-  private _errorMessage = 'Произошла ошибка! Пожалуйста перезагурзите страницу'
+  private _errorMessage = 'Произошла ошибка! Пожалуйста перезагурзите страницу.'
   usersSubject = new BehaviorSubject<IUserGetResponse[]>([])
   // userObservable = this.usersSubject.asObservable()
 
@@ -27,20 +27,45 @@ export class UserService {
               private _authService: AuthService) {
   }
 
-  getUsersData() {
-    this._http.get<IUserGetResponse[]>(`${this._baseURL}/user`)
+  private _intervalSubscription = new Subscription()
+  get intervalSubscription() {
+    return this._intervalSubscription
+  }
+  startInterval() {
+    this._intervalSubscription = interval(5000)
       .pipe(
-        catchError(err => throwError(err))
+        mergeMap(() => this.getUsersData())
       )
+      .subscribe({
+        next: (data) => {
+          this.usersSubject.next(data)
+        },
+        error: () => {}
+      })
+  }
+
+  setUsersData() {
+    this.getUsersData()
       .subscribe({
         next: (users: IUserGetResponse[]) => {
           // this._users = users
+          this._intervalSubscription.unsubscribe()
           this.usersSubject.next(users)
+          this.startInterval()
+
         },
         error: err => {
           this._usersErrorSubject.error(this._errorMessage)
         }
       })
+  }
+
+  getUsersData() {
+    console.log('request to users data')
+    return this._http.get<IUserGetResponse[]>(`${this._baseURL}/user`)
+      .pipe(
+        catchError(err => throwError(err))
+      )
   }
 
   addUser(userRole: string, newUser: IUser) {
@@ -62,14 +87,14 @@ export class UserService {
               )
               .subscribe({
                 next: (data) => {
-                  this.getUsersData()
+                  this.setUsersData()
                 },
                 error: (err) => {
                   this._usersErrorSubject.error(err)
                 }
               })
           } else {
-            this.getUsersData()
+            this.setUsersData()
           }
         },
         error: (err) => {
@@ -86,7 +111,7 @@ export class UserService {
       .subscribe({
         next: (data) => {
           console.log('delete user', data)
-          this.getUsersData()
+          this.setUsersData()
         },
         error: (err) => {
           this._usersErrorSubject.error(this._errorMessage)
@@ -115,7 +140,7 @@ export class UserService {
               )
               .subscribe({
                 next: data => {
-                  this.getUsersData()
+                  this.setUsersData()
                 },
                 error: (err) => {
                   this._usersErrorSubject.error(err)

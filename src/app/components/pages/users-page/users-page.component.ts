@@ -14,21 +14,25 @@ export class UsersPageComponent implements OnInit, OnDestroy{
   private _errorSubscription = new Subscription()
 
   constructor(private _formService: FormService,
-              private _usersService: UserService,
+              private _userService: UserService,
               private _cdr: ChangeDetectorRef) {
   }
   get serverError() {
     return this._serverError
   }
   ngOnInit() {
-    this._errorSubscription = this._usersService.usersErrorSubject.subscribe({
+    console.log('init users page')
+    this._userService.setUsersData()
+    this._errorSubscription = this._userService.usersErrorSubject.subscribe({
       error: (err) => {
+        console.log('error', err)
         this._serverError = err
         this._cdr.detectChanges()
       },
     })
   }
   ngOnDestroy() {
+    console.log('Destroy users page')
     this._errorSubscription.unsubscribe()
   }
 
