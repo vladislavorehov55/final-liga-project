@@ -172,6 +172,7 @@ export class UserService {
   setUsersOnPage(newPageNumber: number) {
     const start = (newPageNumber - 1) * this._itemsOnPage;
     const end = start + this._itemsOnPage;
+    this._currentPageNumber = newPageNumber
     this.usersSubject.next(this._users.slice(start, end))
   }
 

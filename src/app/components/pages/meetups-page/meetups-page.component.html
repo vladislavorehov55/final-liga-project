@@ -4,7 +4,14 @@
     <div class="btnWrap">
       <button class="btnCreate" (click)="openFormHandler()">Создать митап</button>
     </div>
-    <app-meetups-list></app-meetups-list>
+    <app-meetups-list [currentMeetups]="currentMeetups"></app-meetups-list>
+    <app-pagination [itemsCount]="allMeetups"
+                    [itemsOnPage]="meetupsOnPage"
+                    [currentPageNumber]="currentPageNumber"
+                    (changePageEvent)="changePageHandler($event)"
+    >
+
+    </app-pagination>
     <app-form-meetup></app-form-meetup>
   </ng-container>
 

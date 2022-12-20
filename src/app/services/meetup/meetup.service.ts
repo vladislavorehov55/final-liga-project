@@ -72,7 +72,8 @@ export class MeetupService {
       next: (data: IMeetup[]) => {
         this._intervalSubscription.unsubscribe()
         this._meetups = data
-        this.meetupsSubject.next(this.meetups)
+        this.setMeetupsOnPage(1)
+        // this.meetupsSubject.next(this.meetups)
         this.startInterval()
       },
       error: (err) => {
@@ -137,7 +138,7 @@ export class MeetupService {
       .subscribe({
         next: (data) => {
           this._meetups = data
-          this.meetupsSubject.next(data)
+          this.setMeetupsOnPage(this._currentPageNumber)
         },
         error: err => {
           this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
@@ -172,7 +173,7 @@ export class MeetupService {
       .subscribe({
         next: (data: IMeetup[]) => {
           this._meetups = data
-          this.meetupsSubject.next(data)
+          this.setMeetupsOnPage(this._currentPageNumber)
         },
         error: (err) => {
           this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
@@ -246,13 +247,15 @@ export class MeetupService {
         }
       })
   }
-
+  private _searchedMeetups: IMeetup[] | null = null
   searchMeetups(value: string) {
     if (value === '') {
-      this.meetupsSubject.next(this.meetups)
+      // this.meetupsSubject.next(this.meetups)
+      this._searchedMeetups = null
+      this.setMeetupsOnPage(1)
       return
     }
-    const searchedMeetups = this.meetups.filter(meetup => {
+    this._searchedMeetups = this.meetups.filter(meetup => {
       return meetup.name?.toLowerCase().includes(value) || meetup.description?.includes(value) ||
         meetup.location?.toLowerCase().includes(value) || (meetup.duration || null) === +value ||
         meetup.target_audience?.toLowerCase().includes(value) || meetup.will_happen?.toLowerCase().includes(value) ||
@@ -266,6 +269,27 @@ export class MeetupService {
             minute: '2-digit'
           }).includes(value) : null)
     })
-    this.meetupsSubject.next(searchedMeetups)
+    this.setMeetupsOnPage(1)
+    // this.meetupsSubject.next(searchedMeetups)
   }
+
+  private _itemsOnPage = 5
+  get itemOnPage() {
+    return this._itemsOnPage
+  }
+  private _currentPageNumber: number = 1
+  get currentPageNumber() {
+    return this._currentPageNumber
+  }
+  get currentAllMeetups() {
+    return this._searchedMeetups ? this._searchedMeetups.length : this.meetups.length
+  }
+  setMeetupsOnPage(newPageNumber: number) {
+    const start = (newPageNumber - 1) * this._itemsOnPage;
+    const end = start + this._itemsOnPage;
+    this._currentPageNumber = newPageNumber
+    const currentMeetups = this._searchedMeetups ? this._searchedMeetups : this.meetups
+    this.meetupsSubject.next(currentMeetups.slice(start, end))
+  }
+
 }

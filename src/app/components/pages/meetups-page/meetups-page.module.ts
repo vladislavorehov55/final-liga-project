@@ -4,6 +4,7 @@ import { MeetupsPageComponent } from './meetups-page.component';
 import {MeetupsListModule} from "../../meetups-list/meetups-list.module";
 import {FormMeetupModule} from "../../form-meetup/form-meetup.module";
 import {SearchModule} from "../../search/search.module";
+import {PaginationModule} from "../../pagination/pagination.module";
 
 
 
@@ -15,7 +16,8 @@ import {SearchModule} from "../../search/search.module";
     CommonModule,
     MeetupsListModule,
     FormMeetupModule,
-    SearchModule
+    SearchModule,
+    PaginationModule
   ],
   exports: [MeetupsPageComponent]
 })
