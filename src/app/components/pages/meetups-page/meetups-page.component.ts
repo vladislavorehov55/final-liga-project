@@ -22,6 +22,7 @@ export class MeetupsPageComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+    this._meetupsService.setDataMeetups()
     this._errorSubscription = this._meetupsService.meetupsErrorSubject.subscribe({
       error: (err) => {
         this._serverError = err

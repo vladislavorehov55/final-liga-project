@@ -16,7 +16,7 @@ export class MeetupsListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Init meetups')
-    this._meetupService.setDataMeetups()
+    // this._meetupService.setDataMeetups()
     this._meetupsSubscription = this._meetupService.meetupsSubject.subscribe({
       next: (items) => {
         console.log('subscribe', items)
