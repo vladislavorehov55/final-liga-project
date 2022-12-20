@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {IMeetup, IMeetupResponse, MeetupStatusEnum} from "../../models/meetup";
 import {EnvironmentService} from "../environment/environment.service";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, catchError, throwError, concatAll, map, toArray} from "rxjs";
+import {BehaviorSubject, catchError, throwError, concatAll, map, toArray, interval, mergeMap, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../auth/auth.service";
 import {FormGroup} from "@angular/forms";
@@ -48,8 +48,42 @@ export class MeetupService {
   }
 
   ///
+  private _intervalSubscription = new Subscription()
+  get intervalSubscription() {
+    return this._intervalSubscription
+  }
+  startInterval() {
+    this._intervalSubscription = interval(60000)
+      .pipe(
+        mergeMap(() => this.getDataMeetups())
+      )
+      .subscribe({
+        next: (data: IMeetup[]) => {
+          this._meetups = data
+          this.meetupsSubject.next(this.meetups)
+        },
+        error: (err) => {
+        }
+      })
+  }
+
+  setDataMeetups() {
+    this.getDataMeetups().subscribe({
+      next: (data: IMeetup[]) => {
+        this._intervalSubscription.unsubscribe()
+        this._meetups = data
+        this.meetupsSubject.next(this.meetups)
+        this.startInterval()
+      },
+      error: (err) => {
+        this._meetupsErrorSubject.error('Произошла критическая ошибка. Работа с митапами невозможна. Пожалуйста, перезагрузите страницу.')
+        this._intervalSubscription.unsubscribe()
+      }
+    })
+  }
+
   getDataMeetups() {
-    this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
+    return this.http.get<IMeetupResponse[]>(`${this._baseURL}/meetup`)
       .pipe(
         catchError(err => throwError(err)),
         concatAll(),
@@ -64,17 +98,9 @@ export class MeetupService {
         }),
         toArray()
       )
-      .subscribe({
-        next: (data: IMeetup[]) => {
-          this._meetups = data
-          this.meetupsSubject.next(this.meetups)
-        },
-        error: (err) => {
-          this._meetupsErrorSubject.error('Произошла критическая ошибка')
-        }
-      })
 
   }
+
 
   setMeetupOpened(id: number) {
     const meetups = this.meetups.map(meetup => {
@@ -161,7 +187,7 @@ export class MeetupService {
       )
       .subscribe({
         next: (data) => {
-          this.getDataMeetups()
+          this.setDataMeetups()
         },
         error: (err) => {
           this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
@@ -176,7 +202,7 @@ export class MeetupService {
       )
       .subscribe({
         next: () => {
-          this.getDataMeetups()
+          this.setDataMeetups()
         },
         error: (err) => {
           this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')
@@ -213,7 +239,7 @@ export class MeetupService {
       )
       .subscribe({
         next: (meetup) => {
-          this.getDataMeetups()
+          this.setDataMeetups()
         },
         error: err => {
           this._meetupsErrorSubject.error('Произошла ошибка! Пожалуйста перезагрузите страницу')

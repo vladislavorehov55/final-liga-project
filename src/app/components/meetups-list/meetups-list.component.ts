@@ -15,7 +15,8 @@ export class MeetupsListComponent implements OnInit, OnDestroy {
   currentMeetups: IMeetup[] = []
 
   ngOnInit() {
-    this._meetupService.getDataMeetups()
+    console.log('Init meetups')
+    this._meetupService.setDataMeetups()
     this._meetupsSubscription = this._meetupService.meetupsSubject.subscribe({
       next: (items) => {
         console.log('subscribe', items)
@@ -25,6 +26,8 @@ export class MeetupsListComponent implements OnInit, OnDestroy {
     })
   }
   ngOnDestroy() {
+    console.log('Destroy meetups')
+    this._meetupService.intervalSubscription.unsubscribe()
     this._meetupsSubscription.unsubscribe()
   }
 
