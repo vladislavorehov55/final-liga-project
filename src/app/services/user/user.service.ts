@@ -14,7 +14,10 @@ export class UserService {
   private _errorMessage = 'Произошла ошибка! Пожалуйста перезагурзите страницу.'
   usersSubject = new BehaviorSubject<IUserGetResponse[]>([])
   // userObservable = this.usersSubject.asObservable()
-
+  private _users:IUserGetResponse[] = []
+  get users() {
+    return this._users
+  }
   // Error
   private _usersErrorSubject = new BehaviorSubject<string>('')
   get usersErrorSubject() {
@@ -32,13 +35,15 @@ export class UserService {
     return this._intervalSubscription
   }
   startInterval() {
-    this._intervalSubscription = interval(5000)
+    this._intervalSubscription = interval(60000)
       .pipe(
         mergeMap(() => this.getUsersData())
       )
       .subscribe({
         next: (data) => {
-          this.usersSubject.next(data)
+          this._users = data
+          this.setUsersOnPage(1)
+          // this.usersSubject.next(data)
         },
         error: () => {}
       })
@@ -48,9 +53,10 @@ export class UserService {
     this.getUsersData()
       .subscribe({
         next: (users: IUserGetResponse[]) => {
-          // this._users = users
+          this._users = users
           this._intervalSubscription.unsubscribe()
-          this.usersSubject.next(users)
+          this.setUsersOnPage(1)
+          // this.usersSubject.next(users)
           this.startInterval()
 
         },
@@ -147,13 +153,27 @@ export class UserService {
                 }
               })
           } else {
-            this.getUsersData()
+            this.setUsersData()
           }
         },
         error: (err) => {
           this._usersErrorSubject.error(this._errorMessage)
         }
       })
+  }
+  private _itemsOnPage = 5
+  setUsersOnPage(newPage: number) {
+    const pagesCount = Math.ceil(this._users.length / this._itemsOnPage)
+    if (newPage === 0 || newPage === pagesCount) {
+      console.log('Last')
+      return
+    }
+    const start = (newPage - 1) * this._itemsOnPage;
+    const end = start + this._itemsOnPage;
+    console.log('start', start)
+    console.log('end', end)
+
+    this.usersSubject.next(this._users.slice(start, end))
   }
 
 }

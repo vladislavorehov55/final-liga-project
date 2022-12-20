@@ -4,6 +4,7 @@ import { UsersPageComponent } from './users-page.component';
 import {UsersListModule} from "../../users-list/users-list.module";
 import {ModalModule} from "../../shared/modal/modal.module";
 import {FormUserModule} from "../../form-user/form-user.module";
+import {PaginationModule} from "../../pagination/pagination.module";
 
 
 
@@ -15,7 +16,8 @@ import {FormUserModule} from "../../form-user/form-user.module";
     CommonModule,
     UsersListModule,
     ModalModule,
-    FormUserModule
+    FormUserModule,
+    PaginationModule
   ],
   exports: [UsersPageComponent]
 })

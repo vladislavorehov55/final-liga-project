@@ -1,0 +1,12 @@
+<div class="container">
+  <span (click)="changePageEvent.emit(currentPage - 1)">prev</span>
+  <span (click)="changePageEvent.emit(currentPage + 1)">next</span>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+  }
+</style>

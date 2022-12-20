@@ -45,4 +45,8 @@ export class UsersPageComponent implements OnInit, OnDestroy{
     this._formService.openForm()
   }
 
+  changePageHandler(newPage: number) {
+    this._userService.setUsersOnPage(newPage)
+  }
+
 }

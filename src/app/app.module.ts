@@ -13,10 +13,11 @@ import {AuthService} from "./services/auth/auth.service";
 import {JwtInterceptor} from "./interceptors/jwt.interceptor";
 import {HeaderModule} from "./components/header/header.module";
 import {UsersPageModule} from "./components/pages/users-page/users-page.module";
+import {PaginationModule} from "./components/pagination/pagination.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +26,8 @@ import {UsersPageModule} from "./components/pages/users-page/users-page.module";
     AuthPageModule,
     HttpClientModule,
     HeaderModule,
-    UsersPageModule
+    UsersPageModule,
+    PaginationModule
   ],
   providers: [
     MeetupService,
