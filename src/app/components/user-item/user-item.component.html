@@ -1,7 +1,7 @@
 <li class="itemWrap">
   {{changeDetect}}
-  <span class="cell">{{user.email}}</span>
-  <span class="cell">
+  <span class="cell firstCol">{{user.email}}</span>
+  <span class="cell secondCol">
     <app-svg-generator type="delete-icon" (click)="deleteUserHandler()"></app-svg-generator>
     <app-svg-generator type="edit-icon" (click)="openEditUserFormHandler()">
     </app-svg-generator>

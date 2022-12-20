@@ -1,9 +1,15 @@
 .form {
   margin-bottom: 10px;
 }
+.searchInput {
+  border: none;
+  height: 100%;
+}
 .searchInputWrap {
   display: flex;
   align-items: center;
   padding: 5px 10px;
   height: 50px;
+  border-radius: 5px;
+  border: 3px solid #4C3F78;
 }

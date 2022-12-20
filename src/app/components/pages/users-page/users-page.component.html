@@ -1,6 +1,8 @@
 <div class="page">
   <ng-container *ngIf="serverError === ''; else elseBlock ">
-    <button class="btnCreate" (click)="openUserCreationForm()">Создать пользователя</button>
+    <div class="btnCreateWrap">
+      <button class="btnCreate" (click)="openUserCreationForm()">Создать пользователя</button>
+    </div>
     <app-users-list [users]="users"></app-users-list>
     <app-pagination [itemsCount]="totalUsers"
                     [itemsOnPage]="itemsOnPage"

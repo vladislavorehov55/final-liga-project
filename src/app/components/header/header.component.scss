@@ -34,7 +34,13 @@
   cursor: pointer;
   background: none;
   border: none;
+  margin-left: 5px;
 }
 .img {
   display: block;
+}
+@media all and (max-width: 500px) {
+  .logoWrap {
+    display: none;
+  }
 }

@@ -57,7 +57,7 @@ export class UserService {
           this._intervalSubscription.unsubscribe()
           this.setUsersOnPage(1)
           // this.usersSubject.next(users)
-          // this.startInterval()
+          this.startInterval()
 
         },
         error: err => {
